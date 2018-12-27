@@ -1,0 +1,188 @@
+<div class="animated fadeIn" id="loadDataColor" style="display: none">
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="tab-pane" id="processDefine1" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">历史节点颜色</div>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="modifylishijiedianAjax()">历史节点修改</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive-sm table-striped">
+                <thead>
+                <tr>
+                  <th>颜色编号</th>
+                  <th>颜色名称</th>
+                  <th>颜色实例</th>
+                </tr>
+                </thead>
+                <tbody id="colorClearId">
+                <tr id="red" onclick="sendColor()" style="">
+                  <td id="red#111"  >1</td>
+                  <td id="red#222"  >红色</td>
+                  <td id = "red#333"  ><div   id="red#444" style="background:#FF0000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="orange" onclick="sendColor()">
+                  <td id="orange#111">2</td>
+                  <td id="orange#222">橙色</td>
+                  <td id="orange#333"><div id="orange#444" style="background:#FF9900;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="yellow" onclick="sendColor()">
+                  <td id="yellow#111">3</td>
+                  <td id="yellow#222">黄色</td>
+                  <td id="yellow#333"><div id="yellow#444" style="background:#FFFF00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="green" onclick="sendColor()">
+                  <td id="green#111">4</td>
+                  <td id="green#222">绿色</td>
+                  <td id="green#333"><div id="green#444" style="background:#00CC00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="blue" onclick="sendColor()">
+                  <td id="blue#111">5</td>
+                  <td id="blue#222">蓝色</td>
+                  <td id="blue#333"><div id="blue#444" style="background:#3399CC;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="gray" onclick="sendColor()">
+                  <td id="gray#111">6</td>
+                  <td id="gray#222">灰色</td>
+                  <td id="gray#333"><div id="gray#444" style="background:#808080;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="black" onclick="sendColor()">
+                  <td id="black#111">7</td>
+                  <td id="black#222">黑色</td>
+                  <td id="black#333"><div id="black#444" style="background:#000000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="white" onclick="sendColor()">
+                  <td id="white#111">8</td>
+                  <td id="white#222">白色</td>
+                  <td id="white#333"><div id="white#444" style="background:#F5F5F5;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="cyan" onclick="sendColor()">
+                  <td id="cyan#111">9</td>
+                  <td id="cyan#222">蓝绿</td>
+                  <td id="cyan#333"><div id="cyan#444" style="background:#00FA9A;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="magenta" onclick="sendColor()">
+                  <td id="magenta#111">10</td>
+                  <td id="magenta#222">洋红</td>
+                  <td id="magenta#333"><div id="magenta#444" style="background:#CC3399;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="tab-pane" id="processDefine0" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">当前节点修改</div>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="modifydanqianjiedianAjax()">当前节点修改</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive-sm table-striped">
+                <thead>
+                <tr>
+                  <th>颜色编号</th>
+                  <th>颜色名称</th>
+                  <th>颜色实例</th>
+                </tr>
+                </thead>
+                <tbody id="colorClearId1">
+                <tr id="red1" onclick="sendColor1()" style="">
+                  <td id="red#1111"  >1</td>
+                  <td id="red#2221"  >红色</td>
+                  <td id = "red#3331"  ><div   id="red#4441" style="background:#FF0000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="orange1" onclick="sendColor1()">
+                  <td id="orange#1111">2</td>
+                  <td id="orange#2221">橙色</td>
+                  <td id="orange#3331"><div id="orange#4441" style="background:#FF9900;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="yellow1" onclick="sendColor1()">
+                  <td id="yellow#1111">3</td>
+                  <td id="yellow#2221">黄色</td>
+                  <td id="yellow#3331"><div id="yellow#4441" style="background:#FFFF00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="green1" onclick="sendColor1()">
+                  <td id="green#1111">4</td>
+                  <td id="green#2221">绿色</td>
+                  <td id="green#3331"><div id="green#4441" style="background:#00CC00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="blue1" onclick="sendColor1()">
+                  <td id="blue#1111">5</td>
+                  <td id="blue#2221">蓝色</td>
+                  <td id="blue#3331"><div id="blue#4441" style="background:#3399CC;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="gray1" onclick="sendColor1()">
+                  <td id="gray#1111">6</td>
+                  <td id="gray#2221">灰色</td>
+                  <td id="gray#3331"><div id="gray#4441" style="background:#808080;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="black1" onclick="sendColor1()">
+                  <td id="black#1111">7</td>
+                  <td id="black#2221">黑色</td>
+                  <td id="black#3331"><div id="black#4441" style="background:#000000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="white1" onclick="sendColor1()">
+                  <td id="white#1111">8</td>
+                  <td id="white#2221">白色</td>
+                  <td id="white#3331"><div id="white#4441" style="background:#F5F5F5;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="cyan1" onclick="sendColor1()">
+                  <td id="cyan#1111">9</td>
+                  <td id="cyan#2221">蓝绿</td>
+                  <td id="cyan#3331"><div id="cyan#4441" style="background:#00FA9A;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="magenta1" onclick="sendColor1()">
+                  <td id="magenta#1111">10</td>
+                  <td id="magenta#2221">洋红</td>
+                  <td id="magenta#3331"><div id="magenta#4441" style="background:#CC3399;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

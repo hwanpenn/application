@@ -1,0 +1,219 @@
+package com.shineyue.bpm.web;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.shineyue.bpm.domain.SysUser;
+import com.shineyue.bpm.http.HttpResult;
+import com.shineyue.bpm.http.HttpService;
+import com.shineyue.bpm.util.BpmConfigUtil;
+import com.shineyue.bpm.util.UserUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 业务类型管理
+ *
+ * @author liubo
+ * @version 2018-07-10 14:18
+ **/
+@RestController
+@RequestMapping(value ={"/business"})
+public class BusinessTypeController {
+	private static final Log log = LogFactory.getLog(BusinessTypeController.class);
+	private final BpmConfigUtil config;
+	private final ObjectMapper objectMapper;
+
+	@Autowired
+	public BusinessTypeController(BpmConfigUtil config,ObjectMapper objectMapper){
+		this.objectMapper=objectMapper;
+		this.config=config;
+	}
+
+    @RequestMapping(value = {"/getAllCategory"},method = {RequestMethod.GET},produces = {"application/json"})
+    public ObjectNode getAllCategory(@RequestParam Map<String,Object> values){
+		ObjectNode modelNode = null;
+		SysUser user = UserUtil.getCurrentUser();
+		try {
+			Map<String, Object> jsonObject = new HashMap< >();
+			jsonObject.put("zxbm", user.getFzxbm());
+			jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+			jsonObject.put("jgbm", user.getFjgbm());
+			jsonObject.put("khbh", "");
+			jsonObject.put("ywfl", "10");
+			jsonObject.put("ywlb", "");
+			jsonObject.put("blqd", "zxb");
+			jsonObject.put("ffbm", "");
+			jsonObject.put("userid", user.getId());
+			Map<String, Object> m = new HashMap<>();
+			m.put("queryKey", values.get("keyword"));
+			m.put("tenantId", user.getFzxbm());
+			HttpResult hr = HttpService.doPost(
+					"http://" +config.getAddress() + ":" +config.getPort()
+							+ "/business/BPM/business/queryCategory.service",
+					m, objectMapper.writeValueAsString(jsonObject));
+			JsonNode data = this.objectMapper.readTree(hr.getBody());
+			ObjectMapper objectMapper = new ObjectMapper();
+			modelNode = objectMapper.createObjectNode();
+			//modelNode.put("count", data.get("totalNumber").asText());
+			modelNode.put("success", true);
+			modelNode.put("data", data);
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg","");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("查询业务分类异常", e);
+			log.error(e.getMessage());
+			modelNode.put("success", false);
+			modelNode.put("info", "查询异常！");
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg",e.getMessage());
+		}
+		return modelNode;
+    }
+
+	@RequestMapping(value = {"/addCategory"},method = {RequestMethod.POST},produces = {"application/json"})
+	public ObjectNode addCategory(@RequestParam Map<String,Object> values){
+		ObjectNode modelNode = null;
+		SysUser user = UserUtil.getCurrentUser();
+		try {
+			Map<String, Object> jsonObject = new HashMap< >();
+			jsonObject.put("zxbm", user.getFzxbm());
+			jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+			jsonObject.put("jgbm", user.getFjgbm());
+			jsonObject.put("khbh", "");
+			jsonObject.put("ywfl", "10");
+			jsonObject.put("ywlb", "");
+			jsonObject.put("blqd", "zxb");
+			jsonObject.put("ffbm", "");
+			jsonObject.put("userid", user.getId());
+			Map<String, Object> m = new HashMap<>();
+			m.put("category", values.get("category"));
+			m.put("name",values.get("name"));
+			m.put("tenantId", user.getFzxbm());
+			HttpResult hr = HttpService.doPost(
+					"http://" +config.getAddress() + ":" +config.getPort()
+							+ "/business/BPM/business/addCategory.service",
+					m, objectMapper.writeValueAsString(jsonObject));
+			JsonNode data = this.objectMapper.readTree(hr.getBody());
+			ObjectMapper objectMapper = new ObjectMapper();
+			modelNode = objectMapper.createObjectNode();
+			//modelNode.put("count", data.get("totalNumber").asText());
+			modelNode.put("success", true);
+			modelNode.put("data", data);
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg","");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("增加业务分类异常", e);
+			log.error(e.getMessage());
+			modelNode.put("success", false);
+			modelNode.put("info", "增加异常！");
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg",e.getMessage());
+		}
+		return modelNode;
+	}
+
+	@RequestMapping(value = {"/updateCategory"},method = {RequestMethod.POST},produces = {"application/json"})
+	public ObjectNode updateCategory(@RequestParam Map<String,Object> values){
+		ObjectNode modelNode = null;
+		SysUser user = UserUtil.getCurrentUser();
+		try {
+			Map<String, Object> jsonObject = new HashMap< >();
+			jsonObject.put("zxbm", user.getFzxbm());
+			jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+			jsonObject.put("jgbm", user.getFjgbm());
+			jsonObject.put("khbh", "");
+			jsonObject.put("ywfl", "10");
+			jsonObject.put("ywlb", "");
+			jsonObject.put("blqd", "zxb");
+			jsonObject.put("ffbm", "");
+			jsonObject.put("userid", user.getId());
+			Map<String, Object> m = new HashMap<>();
+			m.put("category", values.get("category"));
+			m.put("name",values.get("name"));
+			m.put("tenantId", user.getFzxbm());
+			HttpResult hr = HttpService.doPost(
+					"http://" +config.getAddress() + ":" +config.getPort()
+							+ "/business/BPM/business/updateCategory.service",
+					m, objectMapper.writeValueAsString(jsonObject));
+			JsonNode data = this.objectMapper.readTree(hr.getBody());
+			ObjectMapper objectMapper = new ObjectMapper();
+			modelNode = objectMapper.createObjectNode();
+			//modelNode.put("count", data.get("totalNumber").asText());
+			modelNode.put("success", true);
+			modelNode.put("data", data);
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg","");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("修改业务分类异常", e);
+			log.error(e.getMessage());
+			modelNode.put("success", false);
+			modelNode.put("info", "修改异常！");
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg",e.getMessage());
+		}
+		return modelNode;
+	}
+
+	@RequestMapping(value = {"/deleteCategory"},method = {RequestMethod.POST},produces = {"application/json"})
+	public ObjectNode deleteCategory(@RequestParam Map<String,Object> values){
+		ObjectNode modelNode = null;
+		SysUser user = UserUtil.getCurrentUser();
+		try {
+			Map<String, Object> jsonObject = new HashMap< >();
+			jsonObject.put("zxbm", user.getFzxbm());
+			jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+			jsonObject.put("jgbm", user.getFjgbm());
+			jsonObject.put("khbh", "");
+			jsonObject.put("ywfl", "10");
+			jsonObject.put("ywlb", "");
+			jsonObject.put("blqd", "zxb");
+			jsonObject.put("ffbm", "");
+			jsonObject.put("userid", user.getId());
+			Map<String, Object> m = new HashMap<>();
+			m.put("category", values.get("category"));
+			m.put("name",values.get("name"));
+			m.put("tenantId", user.getFzxbm());
+			HttpResult hr = HttpService.doPost(
+					"http://" +config.getAddress() + ":" +config.getPort()
+							+ "/business/BPM/business/deleteCategory.service",
+					m, objectMapper.writeValueAsString(jsonObject));
+			JsonNode data = this.objectMapper.readTree(hr.getBody());
+			ObjectMapper objectMapper = new ObjectMapper();
+			modelNode = objectMapper.createObjectNode();
+			//modelNode.put("count", data.get("totalNumber").asText());
+			modelNode.put("success", true);
+			modelNode.put("data", data);
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg","");
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("删除业务分类异常", e);
+			log.error(e.getMessage());
+			modelNode.put("success", false);
+			modelNode.put("info", "删除异常！");
+			modelNode.put("currentUser",user.getCaption());
+			modelNode.put("code",0);
+			modelNode.put("msg",e.getMessage());
+		}
+		return modelNode;
+	}
+}

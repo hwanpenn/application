@@ -1,0 +1,61 @@
+<div class="modal"  ng-controller="KisBpmformkeydefinitionPopupCtrl">
+    <div class="modal-dialog" style="width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+                <h2 translate>PROPERTY.FORMKEY.TITLE</h2>
+            </div>
+		<div class="modal-body"> 
+			  	<input type="text" ng-model="searchparam" style="width:400px;height:34px" class="input-medium search-query"/>
+ 				 <button ng-click="search()" type="submit" class="btn">查询</button>
+            	<ul class="nav nav-tabs">
+ 					 <li class="active" >
+ 					 	<a href="#form" data-toggle="tab" translate>PROPERTY.FORMKEY.TITLE</a>
+ 					 </li>
+                 </ul>
+                 <div class="tab-content"  >
+       			<div id="form"  class="tab-pane fade  in active center-td" >	
+       				<table  class="table table-striped">
+            		<thead>
+						<tr>
+							<td translate>PROPERTY.ROWNO</td>
+							<td translate>PROPERTY.FORM.SELECT</td>
+							<td translate>PROPERTY.FORM.ID</td>
+							<td translate>PROPERTY.FORM.NAME</td>
+						</tr>
+					</thead>
+					<tbody>
+   						<tr ng-repeat="form in forms.items">
+   							<td>{{ $index + 1 }}</td>
+    						<td><input name="form" ng-checked="isChecked(form.id)" ng-click="updateSelection($event,form.id,form.name)" type="radio"  /></td>
+    						<td>{{form.id}}</td>
+    						<td>{{form.name}}</td>
+   						 </tr>
+					</tbody>
+				</table>
+				<ul class="pagination">
+					<li>
+						<a ng-click="Previous()">
+							<span translate>PROPERTY.PAGE.PREVIOUS</span>
+						</a>
+					</li>
+					<li ng-repeat="page in formpageList" ng_model="currentPage" ng-class="{active: isActivePage(page)}" >
+						<a ng-click="selectPage(page)">{{ page }}</a>
+					</li>
+					<li>
+						<a ng-click="Next()">
+							<span translate>PROPERTY.PAGE.NEXT</span>
+						</a>
+					</li>
+				</ul>
+       		</div>
+            	
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="close()" class="btn btn-primary" translate>ACTION.CANCEL</button>
+                <button ng-click="save()" class="btn btn-primary" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

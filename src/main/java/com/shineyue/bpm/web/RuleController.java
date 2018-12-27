@@ -1,0 +1,150 @@
+package com.shineyue.bpm.web;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.shineyue.bpm.domain.SysUser;
+import com.shineyue.bpm.http.HttpResult;
+import com.shineyue.bpm.http.HttpService;
+import com.shineyue.bpm.util.BpmConfigUtil;
+import com.shineyue.bpm.util.UserUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author liubo
+ * @version 2017-12-12 9:21
+ **/
+
+@RestController
+public class RuleController {
+
+    private static final Log log = LogFactory.getLog(RuleController.class);
+    private final BpmConfigUtil config;
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public RuleController(BpmConfigUtil config,ObjectMapper objectMapper){
+        this.objectMapper=objectMapper;
+        this.config=config;
+    }
+
+    /**
+     * 流程规则增加修改
+     * @param values 参数
+     */
+    @RequestMapping(value = { "/rule/bpmRuleManager" }, method = { RequestMethod.POST }, produces = {"application/json" })
+    public ObjectNode bpmRuleUpdate(@RequestParam Map<String, String> values) {
+        ObjectNode modelNode = objectMapper.createObjectNode();
+        SysUser user = UserUtil.getCurrentUser();
+        Map<String, Object> jsonObject = new HashMap<>();
+        jsonObject.put("zxbm", user.getFzxbm());
+        jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+        jsonObject.put("jgbm", user.getFjgbm());
+        jsonObject.put("khbh", "");
+        jsonObject.put("ywfl", "10");
+        jsonObject.put("ywlb", "");
+        jsonObject.put("blqd", "zxb");
+        jsonObject.put("ffbm", "");
+        jsonObject.put("userid", user.getId());
+        try {
+            String url;
+            String ID = (values.containsKey("ID") ? values.get("ID") : "");
+            String TYPE = (values.containsKey("TYPE") ? values.get("TYPE") : "");
+            String RULE_NAME = (values.containsKey("RULE_NAME") ? values.get("RULE_NAME") : "");
+            String RULE_CODE = (values.containsKey("CODE") ? values.get("CODE") : "");
+            String RULE_SCRIPT = (values.containsKey("RULE_SCRIPT") ? values.get("RULE_SCRIPT") : "");
+            Map<String,Object> m = new HashMap<>();
+            m.put("ruleType", "1");
+            m.put("ruleName", RULE_NAME);
+            m.put("ruleScript", RULE_SCRIPT);
+            m.put("ret", 99);
+            switch (TYPE){
+                case "ADD":
+                    m.put("msg","ADD");
+                    url = "/BPM/rule/rule_manage.service";
+                    break;
+                case "CHG":
+                    m.put("id", ID);
+                    m.put("ruleCode", RULE_CODE);
+                    m.put("msg","CHG");
+                    url = "/BPM/rule/rule_manage.service";
+                    break;
+                case "DEL":
+                    m.put("id", ID);
+                    m.put("msg","DEL");
+                    url = "/BPM/rule/rule_del.service";
+                    break;
+                 default:
+                     modelNode.put("success",false);
+                     modelNode.put("msg","操作类型不匹配");
+                     return modelNode;
+            }
+            HttpResult hr = HttpService.doPost("http://" + config.getAddress() + ":" + config.getPort()+url,m,objectMapper.writeValueAsString(jsonObject));
+            JsonNode data = this.objectMapper.readTree(hr.getBody());
+            modelNode.put("msg", data.get("msg").asText());
+            modelNode.put("success", Boolean.parseBoolean(data.get("success").asText()));
+        } catch (Exception e) {
+            log.error("运行异常", e);
+            log.error(e.getMessage());
+            modelNode.put("success", false);
+            modelNode.put("msg", "查询异常：" + e.getMessage());
+            e.printStackTrace();
+        }
+        return modelNode;
+    }
+
+    /**
+     * 获取审批规则集合
+     * @param values 参数集合
+     */
+    @RequestMapping(value = { "/rules/query_rules" }, method = { RequestMethod.GET }, produces = {"application/json" })
+    public ObjectNode query_rules(@RequestParam Map<String, String> values) {
+        ObjectNode modelNode = objectMapper.createObjectNode();
+        SysUser user = UserUtil.getCurrentUser();
+        try {
+            Map<String, Object> jsonObject = new HashMap<>();
+            jsonObject.put("zxbm", user.getFzxbm());
+            jsonObject.put("zjbzxbm", user.getFzjbzxbm());
+            jsonObject.put("jgbm", user.getFjgbm());
+            jsonObject.put("khbh", "");
+            jsonObject.put("ywfl", "10");
+            jsonObject.put("ywlb", "");
+            jsonObject.put("blqd", "zxb");
+            jsonObject.put("ffbm", "");
+            jsonObject.put("userid", user.getId());
+            Map<String, Object> m = new HashMap<>();
+            String RULE_NAME = (values.containsKey("RULE_NAME") ? values.get("RULE_NAME") : "");
+            String RULE_SCRIPT = (values.containsKey("RULE_SCRIPT") ? values.get("RULE_SCRIPT") : "");
+            m.put("tenantId", user.getFzxbm());
+            m.put("ruleName",RULE_NAME);
+            m.put("ruleScript",RULE_SCRIPT);
+            HttpResult hr = HttpService.doPost(
+                    "http://" +config.getAddress() + ":" +config.getPort()
+                            + "/BPM/rule/rule_query.service",
+                    m, objectMapper.writeValueAsString(jsonObject));
+            JsonNode data = this.objectMapper.readTree(hr.getBody());
+            modelNode.put("count", data.get("totalNumber").asText());
+            modelNode.put("success", true);
+            modelNode.put("data", data.get("items"));
+            modelNode.put("code",0);
+            modelNode.put("msg","");
+        } catch (Exception e) {
+            log.error("运行异常", e);
+            log.error(e.getMessage());
+            e.printStackTrace();
+            modelNode.put("success", false);
+            modelNode.put("code",0);
+            modelNode.put("msg",e.getMessage());
+        }
+        return modelNode;
+    }
+}

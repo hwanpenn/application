@@ -1,0 +1,2 @@
+<span ng-if="property.value.copyusers.copyUsersArray.length > 0">{{'PROPERTY.COPYUSERS.COPY_USERS_DISPLAY' | translate:property.value.copyusers.copyUsersArray}} </span>
+<span ng-if="(!property.value.copyusers.copyUsersArray ||property.value.copyusers.copyUsersArray.length == 0)" translate>PROPERTY.ASSIGNMENT.EMPTY</span>

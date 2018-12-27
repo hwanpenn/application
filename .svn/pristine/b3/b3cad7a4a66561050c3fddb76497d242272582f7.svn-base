@@ -1,0 +1,151 @@
+<div class="animated fadeIn" id="loadDataRule" style="display: none">
+  <div class="">
+    <div class="card">
+      <div class="card-header">
+        流程规则筛选
+      </div>
+      <div class="card-body" style="padding-bottom: 0.25rem;">
+        <form action="" method="post">
+          <!--<div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-user"></i></span>
+              <span class="input-group-addon">编号</span>
+              <input type="text" id="dataRuleFiter" name="usernameTest3" class="form-control">
+            </div>
+          </div>-->
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-notebook"></i></span>
+              <span class="input-group-addon">名称</span>
+              <input type="email" id="dataRuleFiter1" name="email3" class="form-control">
+
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-ghost"></i></span>
+              <span class="input-group-addon">脚本</span>
+              <input type="password" id="dataRuleFiter2" name="passwordTest3" class="form-control">
+            </div>
+          </div>
+          <!--<div class="row">
+            <div class="col-sm-6 form-group form-actions" style="text-align: right;padding: 0 1.25rem;">
+              <button type="submit" class="btn btn-sm btn-primary" onclick="fiterInstanceModal()">搜索</button>
+            </div>
+            <div class="col-sm-6 form-group form-actions">
+              <button type="submit" class="btn btn-sm btn-primary" onclick="clearInstanceModal()">重置</button>
+            </div>
+          </div>-->
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div class="">
+      <div class="tab-pane" id="DataRuleDefine" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button id="modelTempId" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#NewProcessRule">增加</button>
+                  <button id="" type="button" class="btn btn-success btn-sm" onclick="modifyDataRuleAjax()">修改</button>
+                  <button style="display: none" id="modelTempId1" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#NewProcessRule1">修改</button>
+                  <button type="button" class="btn btn-warning btn-sm" onclick="deleteDataRuleAjax()">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="fiterDataRuleModal()">搜索</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="loadDataRuleReflash()">重置</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="layui-hide" id="loadDataRuleModels" lay-data="{id: 'loadDataRuleModels'}" lay-filter="loadDataRuleModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="NewProcessRule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新建规则</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessName">规则名称</label>
+                      <input type="text" class="form-control" id="newProcessRuleName" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessDes">规则脚本</label>
+                      <textarea style="height: 300px" class="form-control" id="newProcessRuleScript" placeholder="名称"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataRuleAjax()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="NewProcessRule1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">修改规则</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessName">规则名称</label>
+                      <input type="text" class="form-control" id="newProcessRuleName1" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessDes">规则脚本</label>
+                      <textarea style="height: 300px" class="form-control" id="newProcessRuleScript1" placeholder="名称"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="modifyDataRuleAjaxBef()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

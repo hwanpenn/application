@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Process Center">
+    <meta name="author" content="penn">
+</head>
+<body>
+<div class="">
+    <div class="tab-content" style="border: none;">
+        <div class=" active" id="processDesignBiaoDan" role="tabpanel">
+            <div>
+                <div class="card">
+
+                    <div style="padding: 0.40rem 1.25rem;" class="card-header">
+                        <div class="row">
+                            <div  class="col-md-8 input-prepend input-group">
+                                <input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectProcessBiaoDan" autocomplete="off">
+                                <!--<button type="button" class="btn btn-success btn-sm" data-type="reload">搜索</button>-->
+                                <span class="input-group-addon" onclick="fiterProcessBiaoDan()"><i class="fa fa-search"></i></span>
+                                <span class="input-group-addon" onclick="clearProcessBiaoDan()"><i class="fa fa-close"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <table class="layui-hide" id="processDesignModelsBiaoDan" lay-data="{id: 'processDesignModelsBiaoDan'}" lay-filter="processDesignModelsBiaoDan"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    processDesignAjaxBiaoDan();
+//    alert(baseVar);
+$(document).ready(function(){
+    //        alert(tempName);这里的tab用笨办法，
+// 正常的tab选择栏切换时会引发一个bug，导致表格压缩
+
+    $("#processDesignAjaxBiaoDan").click(function(){
+
+        $("#processDesignBiaoDan").show();
+        processDesignAjaxBiaoDan();
+    });
+
+});
+function processDesignAjaxBiaoDan() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processDesignModelsBiaoDan'
+                        ,response: {
+//                statusName: 'status' //数据状态的字段名称，默认：code
+//                ,statusCode: 200 //成功的状态码，默认：0
+//                ,msgName: 'hint' //状态信息的字段名称，默认：msg
+                countName: 'totalNumber', //数据总数的字段名称，默认：count
+                dataName: 'items' //数据列表的字段名称，默认：data
+            },
+//            pageName: 'firstNumber',
+//            limitName: 'pageSize'
+//            request: {
+//                pageName: 'firstNumber'
+//                ,limitName: 'pageSize'
+//            }
+            url:'/bpm/getUpdateForms?keyword=&userId='
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id', title: '表单ID', align:'center',sort: true}
+                ,{field:'name',title: '表单名称'}
+
+//                ,{fixed: '',title:'编辑', align:'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true
+        });
+    });
+};
+
+function fiterProcessBiaoDan() {
+    layui.use('table', function(){
+        var table = layui.table;
+        var fiterName = $("#selectProcessBiaoDan").val();
+        table.reload('processDesignModelsBiaoDan', {
+            where: {
+                keyword: fiterName
+            }
+            ,url: '/bpm/getUpdateForms?userId='
+            ,page: {
+                curr: 1
+            }
+        });
+    })
+}
+function clearProcessBiaoDan() {
+    layui.use('table', function(){
+        var table = layui.table;
+        $("#selectProcessBiaoDan").val("");
+        table.reload('processDesignModelsBiaoDan', {
+            where: {
+                keyword: ""
+            }
+            ,url: '/bpm/getUpdateForms?userId='
+            ,page: {
+                curr: 1
+            }
+        });
+    })
+}
+    function selectDefineBiaoDan() {
+        var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processDesignModelsBiaoDan');
+            resultItems = checkStatus.data;
+        });
+        return resultItems;
+    };
+    function xiugaiBiaodan() {
+        var delItems = selectDefineBiaoDan();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要修改的表单', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsId ="";
+        for(var i=0;i<delItems.length;i++) {
+            if (i == 0) {
+                paramsId = paramsId + delItems[i].id;
+            } else {
+                paramsId = paramsId + ","+ delItems[i].id ;
+            }
+        }
+        var  params = {
+            "taskId":taskIdTemp,
+            "formkey":paramsId
+        };
+        $.ajax({
+            url : "/bpm/manager/processInstance/updateFormKey",
+            data : params,
+            type : "POST",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('修改成功', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                    processInstanceAjaxModel();
+                }else {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('修改失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
+

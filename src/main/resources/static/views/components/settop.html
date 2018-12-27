@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Process Center">
+    <meta name="author" content="penn">
+
+</head>
+<body>
+<div class="">
+    <ul class="nav nav-tabs" role="tablist" id="getDownLis">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" id="processDesignAjaxModel" role="tab" aria-controls="processDesignA" style="color: #536c79">实例信息</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" id="processDefineAjaxModel"  role="tab" aria-controls="processDefineA" style="color: #536c79">活动信息</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" id="processInstanceAjaxModel"  role="tab" aria-controls="processInstanceA" style="color: #536c79">任务信息</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" id="processTimingAjaxModel" role="tab" aria-controls="processTimingA" style="color: #536c79">变量信息</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" id="processStartAjaxModel" role="tab" aria-controls="processStartA" style="color: #536c79">查看流程图</a>
+        </li>
+
+    </ul>
+    <div class="tab-content" style="border: none;">
+        <div class=" active" id="processDesignModel" role="tabpanel">
+            <div>
+                <div class="card">
+
+
+                    <div class="">
+                        <table class="layui-hide" id="processDesignModelsModel" lay-data="{id: 'processDesignModelsModel'}" lay-filter="processDesignModelsModel"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" active" id="processDefineModel" role="tabpane2" style="display: none">
+            <div>
+                <div class="card">
+
+                    <div class="">
+                        <table class="layui-hide" id="processDefineModelsModel" lay-data="{id: 'processDefineModelsModel'}" lay-filter="processDefineModelsModel"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" active" id="processInstanceModel" role="tabpane3" style="display: none">
+            <div>
+                <div class="card">
+
+                    <div class="">
+                        <table class="layui-hide" id="processInstanceModelsModel" lay-data="{id: 'processInstanceModelsModel'}" lay-filter="processInstanceModelsModel"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" active" id="processTimingModel" role="tabpane4" style="display: none">
+            <div>
+                <div class="card">
+
+                    <div class="">
+                        <table class="layui-hide" id="processTimingModelsModel" lay-data="{id: 'processTimingModelsModel'}" lay-filter="processTimingModelsModel"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" active" id="processStartModel" role="tabpane5" style="display: none">
+            <div>
+                <div class="card">
+
+                    <div class="" style="height: 500px;text-align: center">
+                        <!--<table class="layui-hide" id="processStartModelsModel" lay-data="{id: 'processStartModelsModel'}" lay-filter="processStartModelsModel"></table>-->
+                        <img style="margin-top: 40px;margin-left: -35px;" id="processStartModelsImage"  alt="star" src="data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var myprocessInstanceIdTemp = processInstanceIdTemp;
+    var taskIdTemp ="";
+//    var tempClose = false;
+    processDesignAjaxModel();
+//    var baseVar = "1";
+//    alert(processInstanceIdTemp);
+
+
+$(document).ready(function(){
+    //        alert(tempName);这里的tab用笨办法，
+// 正常的tab选择栏切换时会引发一个bug，导致表格压缩
+
+    $("#processDesignAjaxModel").click(function(){
+        $("#processDefineModel").hide();
+        $("#processInstanceModel").hide();
+        $("#processTimingModel").hide();
+        $("#processStartModel").hide();
+        $("#processDesignModel").show();
+        processDesignAjaxModel();
+    });
+    $("#processDefineAjaxModel").click(function(){
+        $("#processDesignModel").hide();
+        $("#processInstanceModel").hide();
+        $("#processTimingModel").hide();
+        $("#processStartModel").hide();
+        $("#processDefineModel").show();
+        processDefineAjaxModel();
+    });
+    $("#processInstanceAjaxModel").click(function(){
+        $("#processDesignModel").hide();
+        $("#processTimingModel").hide();
+        $("#processStartModel").hide();
+        $("#processDefineModel").hide();
+        $("#processInstanceModel").show();
+        processInstanceAjaxModel();
+    });
+    $("#processTimingAjaxModel").click(function(){
+        $("#processDesignModel").hide();
+        $("#processStartModel").hide();
+        $("#processDefineModel").hide();
+        $("#processInstanceModel").hide();
+        $("#processTimingModel").show();
+        processTimingAjaxModel();
+    });
+    $("#processStartAjaxModel").click(function(){
+        $("#processDesignModel").hide();
+        $("#processTimingModel").hide();
+        $("#processDefineModel").hide();
+        $("#processInstanceModel").hide();
+        $("#processStartModel").show();
+        processStartAjaxModel();
+    });
+});
+function processDesignAjaxModel() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processDesignModelsModel'
+
+            ,url:'/bpm/manager/processInstance/getProcessInstanceDetailInfo?processInstanceId='+myprocessInstanceIdTemp
+            ,cols: [[
+////                {type:'checkbox'}
+                {field:'name', title: '实例名称', align:'center',sort: true}
+                ,{field:'remark',title: '实例删除原因'}
+                ,{field:'startTime',  title: '创建时间',align:'center', sort: true}
+                ,{field:'endTime', title: '结束时间',align:'center', sort: true}
+                ,{field:'startUserId', align:'center', title: '发起人ID'}
+                ,{field:'startUserName', align:'center', title: '发起人'}
+                ,{field:'durationTime', align:'center', title: '持续时间'}
+                ,{field:'processInstanceId', title: '实例ID',align:'center', sort: true}
+                ,{field:'businessKey', title: '业务KEY',align:'center', sort: true}
+//                ,{fixed: '',title:'编辑', align:'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true
+        });
+    });
+};
+function processDefineAjaxModel() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processDefineModelsModel'
+            ,url:'/bpm/manager/processInstance/getProcessInstanceActivityDetailInfo?processInstanceId='+myprocessInstanceIdTemp
+            ,cols: [[
+//                {type:'checkbox'}
+                {field:'activityId', title: '活动编号',align:'center', sort: true}
+                ,{field:'activityName',align:'center',title: '活动名称'}
+                ,{field:'activityType',  title: '活动类型', align:'center',sort: true}
+                ,{field:'handlerIds', title: '处理ID', align:'center'}
+                ,{field:'startTime', align:'center', title: '开始时间',sort: true}
+                ,{field:'endTime', align:'center', title: '结束时间',sort: true}
+                ,{field:'durationTime', align:'center', title: '持续时间',sort: true}
+                ,{field:'taskId', align:'center', title: '任务ID',sort: true}
+                ,{field:'remark', align:'center', title: '任务描述',sort: true}
+//                ,{field:'state', title: '结束时间',align:'center',toolbar: '#barDemo3'}
+//                ,{fixed: '',title:'流程操作', align:'center', toolbar: '#barDemo1'}
+            ]]
+
+            ,page: true
+        });
+    });
+//
+};
+function processInstanceAjaxModel() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processInstanceModelsModel'
+            ,url:'/bpm/manager/processInstance/getProcessInstanceTaskInfo?processInstanceId='+myprocessInstanceIdTemp
+            ,cols: [[
+//                {type:'checkbox'}
+                {field:'id', title: '编号ID', align:'center',sort: true}
+                ,{field:'name', title: '任务名称', align:'center',sort: true}
+                ,{field:'createTime', title: '开始时间', align:'center',sort: true}
+                ,{field:'claimTime', title: '申请时间', align:'center',sort: true}
+                ,{field:'endTime', title: '结束时间', align:'center',sort: true}
+                ,{field:'durationTime', title: '持续时间', align:'center',sort: true}
+                ,{field:'handlerIds',title: '处理编号', sort: true}
+                ,{field:'handlerNames',  title: '处理名称',align:'center', sort: true}
+                ,{field:'remark', title: '任务备注',align:'center', sort: true}
+                ,{field:'formKey', title: 'FormKey',align:'center', sort: true}
+//                ,{field:'formKey', title: 'FormKey',align:'center',toolbar: '#barDemo5'}
+                ,{field:'taskDefinitionKey', title: '任务定义KEY',align:'center'}
+                ,{field:'taskCandidates', align:'center', title: '任务候选人'}
+                ,{field:'', title: '操作表单',align:'center',toolbar: '#barDemo8'}
+                ,{field:'', title: '操作任务',align:'center',toolbar: '#barDemo7'}
+//                ,{field:'deployment', align:'center', title: '实例描述'}
+            ]]
+
+            ,page: true
+        });
+    });
+
+};
+function processTimingAjaxModel() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processTimingModelsModel'
+            ,url:'/bpm/manager/processInstance/getProcessInstanceVariableInfo?processInstanceId='+myprocessInstanceIdTemp
+            ,cols: [[
+//                {type:'checkbox'}
+                {field:'name', title: '变量名称', align:'center',sort: true}
+                ,{field:'typeName',align:'center',title: '类型名称',sort: true}
+                ,{field:'value',  title: '变量值', align:'center'}
+                ,{field:'taskId', title: '任务ID',align:'center',sort: true}
+                ,{field:'createTime',  align:'center',title: '创建时间'}
+                ,{field:'lastUpdatedTime', title: '更新时间', align:'center'}
+//                ,{field:'deployment', align:'center', title: '结束时间'}
+//                ,{field:'deployment', align:'center', title: '任务候选人'}
+            ]]
+
+            ,page: true
+        });
+    });
+};
+function processStartAjaxModel() {
+    $.ajax({
+        type : 'GET',
+        url : '/bpm/manager/processInstance/getProcessDiagram?processInstanceId='+myprocessInstanceIdTemp,
+//        ,dataType : 'html',
+        cache : false,
+        async: false,
+        beforeSend : function() {
+        },
+        success : function(response) {
+            $("#processStartModelsImage").attr("src",response.src)
+        }
+    })
+
+
+
+};
+function secondModelClick1() {
+    $.ajax({
+        type : 'GET',
+        url : 'views/components/settopXiuGai.html',
+        dataType : 'html',
+        cache : false,
+        async: false,
+        beforeSend : function() {
+        },
+        success : function(response) {
+            layer.open({
+                type: 1,
+                title: '表单信息',
+                area: ['550px', '550px'],
+                content: response //注意，如果str是object，那么需要字符拼接。
+               ,btn: ['取消','修改'] //只是为了演示
+               ,yes: function(){
+//                $(that).click();
+//                layer.close();
+                    layer.close(layer.index)
+//                    alert("开始调修改");
+
+               },btn2: function(){
+//                $(that).click();
+//                layer.close();
+                    xiugaiBiaodan();
+                    layer.close(layer.index)
+               }
+            });
+        }
+    })
+}
+function secondModelClick2() {
+    $.ajax({
+        type : 'GET',
+        url : 'views/components/settopFenPei.html',
+        dataType : 'html',
+        cache : false,
+        async: false,
+        beforeSend : function() {
+        },
+        success : function(response) {
+            layer.open({
+                type: 1,
+                title: '候选人信息',
+                area: ['550px', '550px'],
+                content: response //注意，如果str是object，那么需要字符拼接。
+               ,btn: ['确定', '取消'] //只是为了演示
+               ,yes: function(){
+//                    tempClose = false;
+
+                  var tempClose = fenpeiYongHu1();
+                    fenpeiYongHu();
+                    if(tempClose == "no"){
+
+                    }else {
+                        layer.close(layer.index);
+                    }
+
+               },btn2: function(){
+//                $(that).click();
+//                layer.close();
+                    layer.close(layer.index)
+               }
+            });
+        }
+    })
+}
+
+
+
+    layui.use('table', function(){
+        var table = layui.table;
+        table.on('tool(processInstanceModelsModel)', function(obj){
+            var data = obj.data;
+            taskIdTemp = data.id;
+            var layEvent = obj.event
+            if(layEvent === 'fenpei'){ //查看
+//                alert("fenpei");
+                secondModelClick2();
+                //do somehing
+            } else if(layEvent === 'biaodan'){ //删除
+//                alert("biaodan");
+                secondModelClick1();
+            }else {
+                return;
+            }
+
+
+
+
+
+
+
+        });
+    });
+
+
+    function selectDesignModelsModel() {
+        var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processDesignModelsModel');
+            resultItems = checkStatus.data;
+        });
+        return resultItems;
+    };
+    function selectDefineModelsModel() {
+        var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processDefineModelsModel');
+            resultItems = checkStatus.data;
+        });
+        return resultItems;
+    };
+    function selectInstanceModelsModel() {
+        var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processInstanceModelsModel');
+            resultItems = checkStatus.data;
+        });
+        return resultItems;
+    };
+    function selectTimingModelsModel() {
+        var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processTimingModelsModel');
+            resultItems = checkStatus.data;
+        });
+        return resultItems;
+    };
+
+</script>
+</body>
+</html>
+

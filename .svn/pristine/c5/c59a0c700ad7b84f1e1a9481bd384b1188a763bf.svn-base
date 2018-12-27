@@ -1,0 +1,710 @@
+<div class="animated fadeIn" id="loadDataTables">
+
+  <div class="">
+    <ul class="nav nav-tabs" role="tablist" id="getDownLis">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" id="processDesignAjax" role="tab" aria-controls="processDesignA" style="color: #536c79">流程设计</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" id="processDefineAjax"  role="tab" aria-controls="processDefineA" style="color: #536c79">流程定义</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" id="processInstanceAjax"  role="tab" aria-controls="processInstanceA" style="color: #536c79">流程实例</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" id="processTimingAjax" role="tab" aria-controls="processTimingA" style="color: #536c79">定时流程作业</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" id="processStartAjax" role="tab" aria-controls="processStartA" style="color: #536c79">定时启动流程作业</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" id="processStartAjaxTest" role="tab" aria-controls="processStartA" style="color: #536c79;display: none" >测试</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="processDesign" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+              <div  class="col-md-3 input-prepend input-group">
+                <input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectProcessDesign" autocomplete="off">
+                <!--<button type="button" class="btn btn-success btn-sm" data-type="reload">搜索</button>-->
+                <span class="input-group-addon" onclick="fiterProcessModal()"><i class="fa fa-search"></i></span>
+                <span class="input-group-addon" onclick="clearProcessModal()"><i class="fa fa-close"></i></span>
+              </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <!--<button type="button" class="btn btn-info btn-sm" onclick="document.getElementById('fileButton').click();">导入</button>-->
+                  <button type="button" id="fileUploadProcessDesign" class="btn btn-info btn-sm" >导入</button>
+                  <!--<input type="file" name="file" id="fileButton" onchange="add(this)" style="display: none" multiple />-->
+                  <a id ="exportModeles" class="btn btn-secondary btn-sm" onclick="daochuAjax()">导出</a>
+                  <button type="button" class="btn btn-success btn-sm" onclick="fabuAjax()">发布</button>
+                  <button type="button" class="btn btn-info btn-sm" onclick="quxiaofabuAjax()">取消发布</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#NewProcessModal">新建流程</button>
+                  <!--<button type="button" class="btn btn-secondary" >-->
+                    <!--Launch large modal-->
+                  <!--</button>-->
+                  <button type="button" class="btn btn-success btn-sm" onclick="copyProcessAjax()">复制流程</button>
+                  <textarea id="fe_text" cols="50" rows="3" style="display: none"></textarea>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteAjax()">删除流程</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="ProcessModalReflash()">刷新</button>
+                  <!--<button type="button" onclick="selectProcessModal()" class="btn btn-primary btn-sm">测试</button>-->
+                  <!--<button type="button" onclick="openProcessModal()" class="btn btn-primary btn-sm">弹窗</button>-->
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <table class="layui-hide" id="processDesignModels" lay-data="{id: 'processDesignModels'}" lay-filter="processDesignModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="processDefine" role="tabpane2" style="display: none">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">流程状态：</div>
+                  <select id="selectDefine" name="select" class="form-control" onchange="fiterDefineModal()">
+                    <option value="0">全部</option>
+                    <option value="1">已激活</option>
+                    <option value="2">未激活</option>
+                  </select>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="DefineModalReflash1()" id="jihuoGetId1" >显示全部</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteDefineAjax()">删除流程</button>
+                  <button type="button" id="NewProcessModal1Cli" style="display: none" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#NewProcessModal1">新建流程</button>
+                  <button type="button" id="NewProcessModal1Cli2" style="display: none" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#NewProcessModal2">新建流程</button>
+                  <button type="button" class="btn btn-success btn-sm" onclick="jihuoDefineAjax()" id="jihuoGetId">激活</button>
+                  <button type="button" class="btn btn-warning btn-sm" onclick="zantinDefineAjax()" id="zantinGetId">暂停</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="DefineModalReflash()">刷新</button>
+                  <!--<button type="button" class="btn btn-primary btn-sm" onclick="modelTestMore()" id="ceshiGetId">测试</button>-->
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <table class="layui-hide" id="processDefineModels" lay-data="{id: 'processDefineModels'}" lay-filter="processDefineModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="processInstance" role="tabpane3" style="display: none">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-6 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">实例状态：</div>
+                  <select id="selectInstance" name="select" class="form-control" onchange="fiterInstanceModal()">
+                    <option value="0">全部</option>
+                    <option value="1">已完成</option>
+                    <option value="2">未完成</option>
+                  </select>
+                  <div style="padding: 0.40rem 0.40rem;">查找：</div>
+                  <input id="selectInstance1" class="form-control" size="16" type="text" placeholder="搜索">
+                  <span class="input-group-addon" onclick="fiterInstanceModal()"><i class="fa fa-search"></i></span>
+                  <span class="input-group-addon" onclick="clearInstanceModal()"><i class="fa fa-close"></i></span>
+                </div>
+                <div class="col-md-6 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="InstanceModalReflash1()" >显示全部</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteInstanceAjax()">删除流程</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="processWorkAjax()">流程作业</button>
+                  <button type="button" class="btn btn-success btn-sm" onclick="jihuoInstanceAjax()">激活</button>
+                  <button type="button" class="btn btn-warning btn-sm" onclick="zantinInstanceAjax()">暂停</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="InstanceModalReflash()">刷新</button>
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <table class="layui-hide" id="processInstanceModels" lay-data="{id: 'processInstanceModels'}" lay-filter="processInstanceModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pan activee" id="processTiming" role="tabpane4" style="display: none">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div class="col-md-12 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="startTimingAjax()">执行</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteTimingAjax()">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="TimingModalReflash()">刷新</button>
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <table class="layui-hide" id="processTimingModels" lay-data="{id: 'processTimingModels'}" lay-filter="processTimingModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane active" id="processStart" role="tabpane5" style="display: none">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <input id="prependedInput5" class="form-control" size="16" type="text" placeholder="查找">
+                  <span class="input-group-addon" onclick="fiterStartModal()"><i class="fa fa-search"></i></span>
+                  <span class="input-group-addon" onclick="clearStartModal()"><i class="fa fa-close"></i></span>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="startStartAjax()">执行</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteStartAjax()">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="StartModalReflash()">刷新</button>
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <table class="layui-hide" id="processStartModels" lay-data="{id: 'processStartModels'}" lay-filter="processStartModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="NewProcessModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新建流程</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessName">流程名称</label>
+                      <input type="text" class="form-control" id="newProcessName" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessDes">流程描述</label>
+                      <input type="text" class="form-control" id="newProcessDes" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary"  onclick="newProcessAjax()">确定</button>
+          <button type="button" class="btn btn-primary" id="closeModelTemp" data-dismiss="modal" style="display: none">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="NewProcessModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="text-align:center" class="modal-dialog modal-lg" role="document">
+      <div style="width: 300px;height: 150px;text-align:center;margin:0 auto" class="modal-content">
+          <div class="">
+            <div class="card">
+              <div class="card-header">
+                流程删除信息
+              </div>
+              <div class="row">
+              <div class="card-body col-sm-7">
+                是否删除其流程实例：
+              </div>
+              <div class="card-body col-sm-5">
+                <label class="switch switch-icon switch-primary-outline-alt">
+                  <input type="checkbox" class="switch-input" checked="" id="checkboxIdGetVal">
+                  <span class="switch-label" data-on="" data-off=""></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+              </div>
+              <div class="card-body" style="text-align:right">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="confirmIdGetVal()">确定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="modal-footer">-->
+          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>-->
+          <!--<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="confirmIdGetVal()">确定</button>-->
+        <!--</div>-->
+      </div>
+    </div>
+  <div class="modal fade" id="NewProcessModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="text-align:center" class="modal-dialog modal-lg" role="document">
+      <div style="width: 500px;text-align:center;margin:0 auto" class="modal-content">
+        <div class="">
+          <div class="card">
+            <div class="card-header">
+              激活流程信息
+            </div>
+
+              <div class="card-body ">
+                <div class="layui-inline">
+                  <label class="layui-form-label">日期：</label>
+                  <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="clicktest1" placeholder="yyyy年MM月dd日">
+                  </div>
+                </div>
+              </div>
+            <div class="card-body ">
+              <div class="layui-inline">
+                <label class="layui-form-label">时间：</label>
+                <div class="layui-input-inline">
+                  <input type="text" class="layui-input" id="clicktest2" placeholder="H点m分">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="card-body col-sm-7" style="text-align:right">
+                是否激活其流程实例：
+              </div>
+              <div class="card-body col-sm-5">
+                <label class="switch switch-icon switch-primary-outline-alt" style="text-align:left">
+                  <input type="checkbox" class="switch-input" checked="" id="checkboxIdGetVal2">
+                  <span class="switch-label" data-on="" data-off=""></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="card-body" style="text-align:center">
+              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">取消</button>
+              <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="confirmIdGetVal2()">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="modal-footer">-->
+      <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>-->
+      <!--<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="confirmIdGetVal()">确定</button>-->
+      <!--</div>-->
+    </div>
+  </div>
+</div>
+
+
+<div class="animated fadeIn" id="loadDataRule" style="display: none">
+  <div class="">
+    <div class="card">
+      <div class="card-header">
+        流程规则筛选
+      </div>
+      <div class="card-body" style="padding-bottom: 0.25rem;">
+        <form action="" method="post">
+          <!--<div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-user"></i></span>
+              <span class="input-group-addon">编号</span>
+              <input type="text" id="dataRuleFiter" name="usernameTest3" class="form-control">
+            </div>
+          </div>-->
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-notebook"></i></span>
+              <span class="input-group-addon">名称</span>
+              <input type="email" id="dataRuleFiter1" name="email3" class="form-control">
+
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-ghost"></i></span>
+              <span class="input-group-addon">脚本</span>
+              <input type="password" id="dataRuleFiter2" name="passwordTest3" class="form-control">
+            </div>
+          </div>
+          <!--<div class="row">
+            <div class="col-sm-6 form-group form-actions" style="text-align: right;padding: 0 1.25rem;">
+              <button type="submit" class="btn btn-sm btn-primary" onclick="fiterInstanceModal()">搜索</button>
+            </div>
+            <div class="col-sm-6 form-group form-actions">
+              <button type="submit" class="btn btn-sm btn-primary" onclick="clearInstanceModal()">重置</button>
+            </div>
+          </div>-->
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div class="">
+      <div class="tab-pane" id="DataRuleDefine" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button id="modelTempId" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#NewProcessRule">增加</button>
+                  <button id="" type="button" class="btn btn-success btn-sm" onclick="modifyDataRuleAjax()">修改</button>
+                  <button style="display: none" id="modelTempId1" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#NewProcessRule1">修改</button>
+                  <button type="button" class="btn btn-warning btn-sm" onclick="deleteDataRuleAjax()">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="fiterDataRuleModal()">搜索</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="loadDataRuleReflash()">重置</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="layui-hide" id="loadDataRuleModels" lay-data="{id: 'loadDataRuleModels'}" lay-filter="loadDataRuleModels"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="NewProcessRule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">新建规则</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessName">规则名称</label>
+                      <input type="text" class="form-control" id="newProcessRuleName" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessDes">规则脚本</label>
+                      <textarea style="height: 300px" class="form-control" id="newProcessRuleScript" placeholder="名称"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataRuleAjax()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="NewProcessRule1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">修改规则</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessName">规则名称</label>
+                      <input type="text" class="form-control" id="newProcessRuleName1" placeholder="名称">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="newProcessDes">规则脚本</label>
+                      <textarea style="height: 300px" class="form-control" id="newProcessRuleScript1" placeholder="名称"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="modifyDataRuleAjaxBef()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="animated fadeIn" id="loadDataColor" style="display: none">
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="tab-pane" id="processDefine1" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">历史节点颜色</div>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="modifylishijiedianAjax()">历史节点修改</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive-sm table-striped">
+                <thead>
+                <tr>
+                  <th>颜色编号</th>
+                  <th>颜色名称</th>
+                  <th>颜色实例</th>
+                </tr>
+                </thead>
+                <tbody id="colorClearId">
+                <tr id="red" onclick="sendColor()" style="">
+                  <td id="red#111"  >1</td>
+                  <td id="red#222"  >红色</td>
+                  <td id = "red#333"  ><div   id="red#444" style="background:#FF0000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="orange" onclick="sendColor()">
+                  <td id="orange#111">2</td>
+                  <td id="orange#222">橙色</td>
+                  <td id="orange#333"><div id="orange#444" style="background:#FF9900;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="yellow" onclick="sendColor()">
+                  <td id="yellow#111">3</td>
+                  <td id="yellow#222">黄色</td>
+                  <td id="yellow#333"><div id="yellow#444" style="background:#FFFF00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="green" onclick="sendColor()">
+                  <td id="green#111">4</td>
+                  <td id="green#222">绿色</td>
+                  <td id="green#333"><div id="green#444" style="background:#00CC00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="blue" onclick="sendColor()">
+                  <td id="blue#111">5</td>
+                  <td id="blue#222">蓝色</td>
+                  <td id="blue#333"><div id="blue#444" style="background:#3399CC;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="gray" onclick="sendColor()">
+                  <td id="gray#111">6</td>
+                  <td id="gray#222">灰色</td>
+                  <td id="gray#333"><div id="gray#444" style="background:#808080;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="black" onclick="sendColor()">
+                  <td id="black#111">7</td>
+                  <td id="black#222">黑色</td>
+                  <td id="black#333"><div id="black#444" style="background:#000000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="white" onclick="sendColor()">
+                  <td id="white#111">8</td>
+                  <td id="white#222">白色</td>
+                  <td id="white#333"><div id="white#444" style="background:#F5F5F5;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="cyan" onclick="sendColor()">
+                  <td id="cyan#111">9</td>
+                  <td id="cyan#222">蓝绿</td>
+                  <td id="cyan#333"><div id="cyan#444" style="background:#00FA9A;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="magenta" onclick="sendColor()">
+                  <td id="magenta#111">10</td>
+                  <td id="magenta#222">洋红</td>
+                  <td id="magenta#333"><div id="magenta#444" style="background:#CC3399;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="tab-pane" id="processDefine0" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <div style="padding: 0.40rem 0;">当前节点修改</div>
+                </div>
+                <div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">
+                  <button type="button" class="btn btn-success btn-sm" onclick="modifydanqianjiedianAjax()">当前节点修改</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive-sm table-striped">
+                <thead>
+                <tr>
+                  <th>颜色编号</th>
+                  <th>颜色名称</th>
+                  <th>颜色实例</th>
+                </tr>
+                </thead>
+                <tbody id="colorClearId1">
+                <tr id="red1" onclick="sendColor1()" style="">
+                  <td id="red#1111"  >1</td>
+                  <td id="red#2221"  >红色</td>
+                  <td id = "red#3331"  ><div   id="red#4441" style="background:#FF0000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="orange1" onclick="sendColor1()">
+                  <td id="orange#1111">2</td>
+                  <td id="orange#2221">橙色</td>
+                  <td id="orange#3331"><div id="orange#4441" style="background:#FF9900;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="yellow1" onclick="sendColor1()">
+                  <td id="yellow#1111">3</td>
+                  <td id="yellow#2221">黄色</td>
+                  <td id="yellow#3331"><div id="yellow#4441" style="background:#FFFF00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="green1" onclick="sendColor1()">
+                  <td id="green#1111">4</td>
+                  <td id="green#2221">绿色</td>
+                  <td id="green#3331"><div id="green#4441" style="background:#00CC00;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="blue1" onclick="sendColor1()">
+                  <td id="blue#1111">5</td>
+                  <td id="blue#2221">蓝色</td>
+                  <td id="blue#3331"><div id="blue#4441" style="background:#3399CC;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="gray1" onclick="sendColor1()">
+                  <td id="gray#1111">6</td>
+                  <td id="gray#2221">灰色</td>
+                  <td id="gray#3331"><div id="gray#4441" style="background:#808080;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="black1" onclick="sendColor1()">
+                  <td id="black#1111">7</td>
+                  <td id="black#2221">黑色</td>
+                  <td id="black#3331"><div id="black#4441" style="background:#000000;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="white1" onclick="sendColor1()">
+                  <td id="white#1111">8</td>
+                  <td id="white#2221">白色</td>
+                  <td id="white#3331"><div id="white#4441" style="background:#F5F5F5;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="cyan1" onclick="sendColor1()">
+                  <td id="cyan#1111">9</td>
+                  <td id="cyan#2221">蓝绿</td>
+                  <td id="cyan#3331"><div id="cyan#4441" style="background:#00FA9A;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                <tr id="magenta1" onclick="sendColor1()">
+                  <td id="magenta#1111">10</td>
+                  <td id="magenta#2221">洋红</td>
+                  <td id="magenta#3331"><div id="magenta#4441" style="background:#CC3399;height:20px;width:50px;position:absolute;">
+                  </div></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="animated fadeIn" id="loadPermission111" style="display: none">
+  <!--<div class="">-->
+    <!--<div class="">-->
+      <!--<div class="tab-pane" id="loadPermissionTable" role="tabpanel">-->
+        <!--<div>-->
+          <!--&lt;!&ndash;<div class="card">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div style="padding: 0.40rem 1.25rem;" class="card-header">&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div  class="col-md-3 input-prepend input-group">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectPermissionTable" autocomplete="off">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span class="input-group-addon" onclick="selectPermissionTable1()"><i class="fa fa-search"></i></span>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span class="input-group-addon" onclick="selectPermissionTable2()"><i class="fa fa-close"></i></span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="col-md-9 input-prepend " style="text-align: right;padding: 0.40rem 1.25rem;">&ndash;&gt;-->
+
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="">&ndash;&gt;-->
+              <!--&lt;!&ndash;<table class="layui-hide" id="superPermissionTableModel" lay-data="{id: 'superPermissionTableModel'}" lay-filter="superPermissionTableModel"></table>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--<div class="card">-->
+            <!--<div class="card-body">-->
+              <!--<div style="padding: 0.40rem 1.25rem;background: #f1f1f1;" class="card-header">-->
+                <!--<div class="row">-->
+                  <!--<div  class="col-md-3 input-prepend input-group">-->
+                    <!--<input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectPermissionTable" autocomplete="off">-->
+                    <!--<span class="input-group-addon" onclick="selectPermissionTable1()"><i class="fa fa-search"></i></span>-->
+                    <!--<span class="input-group-addon" onclick="selectPermissionTable2()"><i class="fa fa-close"></i></span>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<table class="layui-hide" id="loadPermissionTableModel" lay-data="{id: 'loadPermissionTableModel'}" lay-filter="loadPermissionTableModel"></table>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+</div>
+<div class="animated fadeIn" id="loadPermission" style="display: none">
+  <div class="">
+    <div class="">
+      <div class="tab-pane" id="loadPermission1" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                  <input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectPermissionTable" autocomplete="off">
+                  <span class="input-group-addon" onclick="selectPermissionTable1()"><i class="fa fa-search"></i></span>
+                  <span class="input-group-addon" onclick="selectPermissionTable2()"><i class="fa fa-close"></i></span>
+                </div>
+
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="layui-hide" id="loadPermissionTableModel" lay-data="{id: 'loadPermissionTableModel'}" lay-filter="loadPermissionTableModel"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

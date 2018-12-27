@@ -1,0 +1,2904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Process Center">
+  <meta name="author" content="penn">
+  <meta name="keyword" content="ajax,jquery,process">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>流程管理中心</title>
+  <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="layui/css/layui.css" rel="stylesheet">
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<header class="app-header navbar">
+<button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<a class="navbar-brand" href="#"></a>
+<button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<ul class="nav navbar-nav d-md-down-none">
+<li class="nav-item px-3">
+<a class="nav-link" href="#">流程系统</a>
+  <input value="" type="button" id="getData1" style="display: none" onclick="processDesignAjax()">
+  <input value="" type="button" id="getData2" style="display: none" onclick="loadDataRuleAjax()">
+  <input value="" type="button" id="getData3" style="display: none" onclick="loadDataColorAjax()">
+  <input value="" type="button" id="getData6" style="display: none" onclick="processDefineAjax()">
+  <input value="" type="button" id="getData4" style="display: none" >
+  <input value="" type="button" id="getData5" style="display: none" >
+</li>
+</ul>
+<ul class="nav navbar-nav ml-auto">
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="margin-right: 10px;">
+      <canvas id="myCanvas" width="40" height="40">
+      </canvas>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" style="text-align:center;min-width: 70px;" onclick="userLogout()">
+      <a class="dropdown-item" href="#" style="width: 70px;min-width: 100px;padding: 4px;"><i class="fa fa-lock"></i> 退出</a>
+
+    </div>
+  </li>
+
+</ul>
+</header>
+<div class="app-body">
+<div class="sidebar">
+<nav class="sidebar-nav">
+<ul class="nav">
+<li class="nav-title" style="font-size: 15px;padding: 1rem;">
+流程管理中心
+</li>
+<li class="nav-item nav-dropdown">
+  <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> 流程管理</a>
+  <ul class="nav-dropdown-items">
+    <li class="nav-item">
+      <a style="" id="processDesignAjaxMain" class="nav-link site-demo-active" data-type="tabAdd" href="components/tables.html" lay-id="11"><i class="icon-pin"></i>住房公积金业务</a>
+    </li>
+    <li class="nav-item">
+      <a style="" id="processDesignAjaxMain1" class="nav-link "  href="components/tables.html" lay-id="44"><i class="icon-pin"></i>资金管理</a>
+    </li>
+    <li class="nav-item">
+      <a style="" id="processDesignAjaxMain2" class="nav-link "  href="components/tables.html" lay-id="55"><i class="icon-pin"></i>电子档案</a>
+    </li>
+    <li class="nav-item">
+      <a style="" id="processDesignAjaxMain3" class="nav-link "  href="components/tables.html" lay-id="66"><i class="icon-pin"></i>财务管理</a>
+    </li>
+  </ul>
+</li>
+  <li class="nav-item">
+    <a class="nav-link site-demo-active" id="loadDataRuleAjaxMain" data-type="tabAdd" href="components/tablesRule.html" lay-id="22"><i class="icon-calculator"></i>流程规则管理</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link site-demo-active" id="loadDataColorAjax" data-type="tabAdd" href="components/tablesColor.html" lay-id="33"><i class="icon-pie-chart"></i>流程颜色设置</a>
+  </li>
+<li class="divider"></li>
+</ul>
+</nav>
+<button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>
+<main class="main">
+
+<ol class="breadcrumb" style="padding: 0.55rem 1rem;">
+  <div id="getLiTry" style="margin:0px;width: 100%;" class="layui-tab" lay-filter="processTab" lay-allowclose="true">
+    <ul id="getUlTry" class="layui-tab-title">
+      <li class="layui-this layui-this-select" lay-id="11" id="tabItemName">住房公积金业务</li>
+
+    </ul>
+  </div>
+</ol>
+<div style="padding: 0 16px;margin-top: -13px;" class="container-fluid">
+<div id="ui-view"></div>
+</div>
+</main>
+</div>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">编辑</a>
+</script>
+<script type="text/html" id="barDemo9">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detailDefine">查看定义</a>
+</script>
+<script type="text/html" id="barDemo10">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detailShiLi">查看实例</a>
+</script>
+<script type="text/html" id="barDemo4">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+</script>
+<script type="text/html" id="barDemo7">
+  {{#  if(d.endTime != null||d.endTime != ""){ }}
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="fenpei">分配</a>
+  {{#  } else { }}
+  <!--<a class="" lay-event="detail"></a>-->
+  {{#  } }}
+</script>
+<script type="text/html" id="barDemo8">
+  {{#  if(d.endTime != null||d.endTime != ""){ }}
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="biaodan">修改</a>
+  {{#  } else { }}
+  <!--<a class="" lay-event="detail"></a>-->
+  {{#  } }}
+</script>
+<script type="text/html" id="barDemo1">
+  {{#  if(d.state == 1){ }}
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detailZanTing">暂停</a>
+  {{#  } else { }}
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detailJiHuo">激活</a>
+  {{#  } }}
+</script>
+<script type="text/html" id="barDemo3">
+  {{#  if(d.state == 1){ }}
+  <a class="" lay-event="detail">已激活</a>
+  {{#  } else { }}
+  <a class="" lay-event="detail">未激活</a>
+  {{#  } }}
+</script>
+
+<footer class="app-footer">
+<span><a href="">流程中心</a> &copy; 2017 制作.</span>
+<span class="ml-auto">Powered by <a href="">ProcessCenter</a></span>
+</footer>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="node_modules/pace-progress/pace.min.js"></script>
+<script src="node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="js/app.js"></script>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="dist/clipboard.min.js" charset="utf-8"></script>
+<script>
+var tabKey = "hfb";
+var fiterParameter = {
+    "processDefinitionIdFiter":"",
+    "processKeyFiter":""
+};
+var processInstanceIdTemp = "";
+layui.use('element', function(){
+var $ = layui.jquery
+,element = layui.element;
+var processTabNames = ["住房公积金业务"];
+var active = {
+tabAdd: function(){
+    var tabName = $(this).text();
+    var tabId = $(this).attr("lay-id");
+    var Tabresult = false;
+    $.each(processTabNames,function(index,value){
+        if(value==tabName){
+            Tabresult = true;
+        }
+    });
+    if(Tabresult){
+        $('.layui-tab-title li').each(function(){
+            if($(this).attr('lay-id')==tabId){
+                $(this).addClass('layui-this');
+            }else {
+                $(this).removeClass('layui-this');
+            }
+        });
+        return;
+    }else{
+        processTabNames.push(tabName);
+        element.tabAdd('processTab', {
+            title: tabName
+            ,content: '内容'
+            ,id: tabId
+        })
+    }
+   $('.layui-tab-title li').each(function(){
+       if($(this).attr('lay-id')==tabId){
+           $(this).addClass('layui-this');
+       }else {
+           $(this).removeClass('layui-this');
+       }
+   });
+}
+};
+$('.site-demo-active').on('click', function(){
+var othis = $(this), type = othis.data('type');
+active[type] ? active[type].call(this, othis) : '';
+});
+$("#getLiTry ul").on("click","li", function() {
+        var tabIdTemp = $(this).attr('lay-id');
+        $('.site-demo-active').each(function(){
+            if($(this).attr('lay-id')==tabIdTemp){
+//                $('#ui-view').empty();
+                $(this).click();
+            }else {
+
+            }
+        });
+});
+});
+
+window.onload = function(){
+    function getUserNameAjax() {
+        $.ajax({
+            url : '/bpm/manager/models/query_Models?key='+tabKey+'&keyword=&_=1512374250213&page=1&limit=1',
+            type : "GET",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                var strVariable =  result.currentUser;
+                var stringName = "";
+                var pxNum = "";
+//            alert(strVariable);
+                if(strVariable.length<2){
+                    stringName = strVariable;
+                    pxNum = 14 ;
+                }else if(strVariable.length>=2){
+                    stringName = strVariable.substring(strVariable.length-2, strVariable.length);
+                    pxNum = 8 ;
+                }
+//            alert(stringName+""+pxNum);
+                SetCurrentUserNameCanvas(stringName,pxNum);
+            },
+            error : function(result) {
+                SetCurrentUserNameCanvas("空值");
+            }
+        });
+    }
+    function SetCurrentUserNameCanvas(userName,pxNum) {
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.fillStyle = "#F0F0F0";
+        ctx.arc(20,20,18,0,2*Math.PI);
+        ctx.fill();
+        ctx.font = "11px Verdana";
+        ctx.fillStyle = "#3da0ff";
+        ctx.stroke();
+        ctx.font="10px Arial";
+        ctx.fillText(userName,pxNum,24);
+    }
+    getUserNameAjax();
+    $("#processDesignAjax").click(function(){
+        $("#processDefine").hide();
+        $("#processInstance").hide();
+        $("#processTiming").hide();
+        $("#processStart").hide();
+        $("#processDesign").show();
+        processDesignAjax();
+    });
+    $("#processDefineAjax").click(function(){
+        $("#processDesign").hide();
+        $("#processInstance").hide();
+        $("#processTiming").hide();
+        $("#processStart").hide();
+        $("#processDefine").show();
+        processDefineAjax();
+    });
+    $("#processInstanceAjax").click(function(){
+        $("#processDesign").hide();
+        $("#processTiming").hide();
+        $("#processStart").hide();
+        $("#processDefine").hide();
+        $("#processInstance").show();
+        processInstanceAjax();
+    });
+    $("#processTimingAjax").click(function(){
+        $("#processDesign").hide();
+        $("#processStart").hide();
+        $("#processDefine").hide();
+        $("#processInstance").hide();
+        $("#processTiming").show();
+        processTimingAjax();
+    });
+    $("#processStartAjax").click(function(){
+        $("#processDesign").hide();
+        $("#processTiming").hide();
+        $("#processDefine").hide();
+        $("#processInstance").hide();
+        $("#processStart").show();
+        processStartAjax();
+    });
+}
+
+$(document).ready(function(){
+      //        alert(tempName);这里的tab用笨办法，已解决window.onload = function(){}
+// 正常的tab选择栏切换时会引发一个bug，导致表格压缩$(document).ready(function(){})
+  });
+
+
+
+function processDesignAjax() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processDesignModels'
+            ,url:'/bpm/manager/models/query_Models?key='+tabKey+'&keyword=&_=1512374250213'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'name', title: '流程名称', align:'center',sort: true}
+                ,{field:'description',title: '描述'}
+                ,{field:'createTime',  title: '创建时间',align:'center', sort: true}
+                ,{field:'lastUpdateTime', title: '更新时间',align:'center', sort: true}
+                ,{field:'deployment', align:'center', title: '状态'}
+                ,{field:'deploymentTime', title: '部署时间',align:'center', sort: true}
+                ,{fixed: '',title:'流程定义', align:'center', toolbar: '#barDemo9'}
+                ,{fixed: '',title:'编辑', align:'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true
+        });
+    });
+};
+//火狐浏览器首次加载会失效 这里添加一个加载 坏处是首次就加载了两遍了；
+//processDesignAjax();
+function processDefineAjax() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processDefineModels'
+            ,url:'/bpm/manager/processes/getBpmProcessDefinistionList?key='+tabKey+'&state=&query='
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'name', title: '流程名称',align:'center', sort: true}
+                ,{field:'description',align:'center',title: '流程描述'}
+                ,{field:'processKey',  title: '流程KEY', align:'center',sort: true}
+                ,{field:'version', title: '版本号', align:'center'}
+                ,{field:'deployDateTime', align:'center', title: '发布时间',sort: true}
+                ,{field:'state', title: '当前状态',align:'center',toolbar: '#barDemo3'}
+                ,{field:'', title: '流程实例',align:'center',toolbar: '#barDemo10'}
+                ,{fixed: '',title:'流程操作', align:'center', toolbar: '#barDemo1'}
+            ]],
+            where: {
+                processKey: fiterParameter.processKeyFiter
+            }
+            ,page: true
+        });
+    });
+};
+function processInstanceAjax() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processInstanceModels'
+            ,url:'/bpm/manager/processInstances/getBpmProcessInstanceList?key='+tabKey+'&state=&query=&keyword=&tenantId='
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'processDefinitionName',align:'center',  title: '流程名称'}
+                ,{field:'startUserName',align:'center',  title: '发起人'}
+                ,{field:'remark', align:'center', title: '实例描述'}
+                ,{field:'durationTime', title: '持续时间',align:'center'}
+                ,{field:'startTime',title: '创建时间', sort: true}
+                ,{field:'endTime',  title: '结束时间',align:'center', sort: true}
+                ,{field:'startUserId', title: '发起人ID',align:'center', sort: true}
+                ,{field:'processInstanceId', align:'center', title: '实例ID'}
+                ,{field:'businessKey', title: '业务KEY', align:'center',sort: true}
+                ,{fixed: '',title:'详细信息', align:'center', toolbar: '#barDemo4'}
+            ]],
+            where: {
+                processDefinitionId: fiterParameter.processDefinitionIdFiter
+            }
+            ,page: true
+        });
+    });
+
+};
+function processTimingAjax() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processTimingModels'
+            ,url:'/bpm/manager/job/findJobList?tenantId=&keyword='
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'name', title: '流程定义名称', align:'center',sort: true}
+                ,{field:'description',align:'center',title: '当前任务节点名称',sort: true}
+                ,{field:'createTime',  title: '加锁人', align:'center'}
+                ,{field:'lastUpdateTime', title: '锁过期时间',align:'center',sort: true}
+                ,{field:'deploymentTime',  align:'center',title: '异常信息'}
+                ,{field:'deployment', title: '异常堆栈', align:'center'}
+                ,{field:'deployment', align:'center', title: '剩余次数'}
+                ,{field:'deployment', align:'center', title: '任务候选人'}
+            ]]
+
+            ,page: true
+        });
+    });
+};
+function processStartAjax() {
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#processStartModels'
+            ,url:'/bpm/manager/job/findStartJobList?keyword='
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'processDefintionName', title: '流程定义名称',align:'center', sort: true}
+                ,{field:'lockOwner',align:'center',title: '加锁人'}
+                ,{field:'lockExpirationTime',align:'center',  title: '锁过期时间', sort: true}
+                ,{field:'duedate',align:'center', title: '到期时间', sort: true}
+                ,{field:'exceptionStacktrace',align:'center',  title: '异常堆栈'}
+                ,{field:'exceptionMessage',align:'center', title: '异常信息'}
+                ,{field:'retries',align:'center',  title: '剩余次数'}
+            ]]
+
+            ,page: true
+        });
+    });
+};
+function loadDataColorAjax() {
+//    alert("加载流程颜色");
+//     $.ajax({
+//         url : url,
+//         data : params,
+//         type : type,
+//         timeout : 60000,
+//         cache : false,
+//         beforeSend :function(xmlHttp){
+//             xmlHttp.setRequestHeader("If-Modified-Since","0");
+//             xmlHttp.setRequestHeader("Cache-Control","no-cache");
+//         },
+//         success : function(result) {
+//             SetCurrentUserName(result.currentUser);
+//             var json = eval(result.result);
+//             var tbody="";
+//             $.each(json, function (index, item) {
+//                 var id = json[index].id;
+//                 var name = json[index].name;
+//                 var description = json[index].description;
+//                 var createTime = json[index].createTime;
+//                 var lastUpdateTime = json[index].lastUpdateTime;
+//                 var deploymentTime = json[index].deploymentTime
+//                 var deployment = json[index].deployment;
+//                 tbody=tbody+"<tr><td><input id="+id+" type='checkbox' onclick=\"check('"+id+"')\"'></td><td>"+name+"</td><td>"+description+"</td><td>"+createTime+"</td><td>"+lastUpdateTime+"</td><td>"+deployment+"</td><td>"+deploymentTime+"</td><td><a href=''>编辑</a></td></tr>";
+//             });
+//             $("#models").html(tbody);
+//         },
+//         error : function(result) {
+//             SetCurrentUserName(result.currentUser);
+//             alert("error");
+//         }
+//     });
+};
+function loadDataRuleAjax() {
+//    alert("加载流程规则");
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#loadDataRuleModels'
+                ,response: {
+//                statusName: 'status' //数据状态的字段名称，默认：code
+//                ,statusCode: 200 //成功的状态码，默认：0
+//                ,msgName: 'hint' //状态信息的字段名称，默认：msg
+                    countName: 'count', //数据总数的字段名称，默认：count
+                    dataName: 'data' //数据列表的字段名称，默认：data
+                }
+            ,
+            where: {
+
+            }
+            ,url:'/bpm/rules/query_rules'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id',align:'center', title: 'ID', sort: true}
+                ,{field:'ruleCode',align:'center',title: '编号', sort: true}
+                ,{field:'ruleName',align:'center', title: '名称', sort: true}
+                ,{field:'ruleScript',align:'center',  title: '脚本'}
+            ]]
+
+            ,page: true
+        });
+    });
+};
+
+
+//获取勾选项 111
+    function selectProcessModal() {
+    var resultItems = [];
+        layui.use('table', function(){
+            var table = layui.table;
+            var checkStatus = table.checkStatus('processDesignModels');
+            resultItems = checkStatus.data;
+        });
+      return resultItems;
+    }
+//搜索 111
+    function fiterProcessModal() {
+        layui.use('table', function(){
+            var table = layui.table;
+            var fiterName = $("#selectProcessDesign").val();
+            table.reload('processDesignModels', {
+                where: {
+                    keyword: fiterName
+                }
+                ,url: '/bpm/manager/models/query_Models?key='+tabKey+'&_=1512374250213'
+                ,page: {
+                    curr: 1
+                }
+            });
+        })
+    };
+//清空搜索 111
+    function clearProcessModal() {
+        layui.use('table', function(){
+            var table = layui.table;
+            $("#selectProcessDesign").val("");
+            table.reload('processDesignModels', {
+                where: {
+                    keyword: ""
+                }
+                ,url: '/bpm/manager/models/query_Models?key='+tabKey+'&_=1512374250213'
+                ,page: {
+                    curr: 1
+                }
+            });
+        })
+    };
+//上传 111
+      layui.use('upload', function(){
+          var upload = layui.upload;
+
+          //执行实例
+          var uploadInst = upload.render({
+              elem: '#fileUploadProcessDesign' //绑定元素
+              ,url: '/bpm/manager/model/impProcess' //上传接口
+              ,accept: 'file' //普通文件
+              ,done: function(res){
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('状态：'+res.msg, {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+                  ProcessModalReflash();
+              }
+              ,error: function(){
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('上传失败', {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+              }
+          });
+      });
+//导出 111
+    function daochuAjax() {
+        var delItems = selectProcessModal();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要导出的流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsIds ="";
+        for(var i=0;i<delItems.length;i++) {
+            if (i == 0) {
+                paramsIds = paramsIds + delItems[i].id;
+            } else {
+                paramsIds = paramsIds + ","+ delItems[i].id ;
+            }
+        }
+        $("#exportModeles").attr("href",window.document.location.href.split("#")[0]+"manager/modle-definitions/"+paramsIds+"/export")
+    };
+//发布 111
+    function fabuAjax() {
+        var delItems = selectProcessModal();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要发布的流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsId ="";
+        var paramsName ="";
+        for(var i=0;i<delItems.length;i++) {
+            if (i == 0) {
+                paramsId = paramsId + delItems[i].id;
+                paramsName = paramsName + delItems[i].name;
+            } else {
+            paramsId = paramsId + ";"+ delItems[i].id ;
+            paramsName = paramsName +  ";"+ delItems[i].name;
+           }
+        }
+        var  params = {
+            "source":paramsId,
+            "sourceMc":paramsName
+        }
+        $.ajax({
+            url : "/bpm/manager/model/deployProcess",
+            data : params,
+            type : "POST",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('发布成功', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                    ProcessModalReflash();
+                }else {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('发布失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        });
+    };
+    //取消发布 111
+    function quxiaofabuAjax() {
+        var delItems = selectProcessModal();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要取消发布的流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsId ="";
+        var paramsName ="";
+        var paramsDepId ="";
+        for(var i=0;i<delItems.length;i++) {
+            if(delItems[i].deploymentId==""||delItems[i].deploymentId==null||delItems[i].deploymentId==undefined){
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('所选流程中包含未发布的流程', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+                return;
+            }else {
+                if (i == 0) {
+                    paramsId = paramsId + delItems[i].id;
+                    paramsName = paramsName + delItems[i].name;
+                    paramsDepId = paramsDepId + delItems[i].deploymentId;
+                } else {
+                    paramsId = paramsId + ";"+ delItems[i].id ;
+                    paramsName = paramsName +  ";"+ delItems[i].name;
+                    paramsDepId = paramsDepId +  ";"+ delItems[i].deploymentId;
+                }
+            }
+        }
+        var  params = {
+            "source":paramsId,
+            "sourceMc":paramsName,
+            "deploymentId":paramsDepId
+        }
+        $.ajax({
+            url : "/bpm/manager/model/unDeployProcess",
+            data : params,
+            type : "POST",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('取消发布成功', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                    ProcessModalReflash();
+                }else {
+//                    alert("发布失败，错误信息："+result.msg);
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('发布失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+
+            }
+        });
+    };
+    //新建流程 111
+    function newProcessAjax() {
+//        alert($("#newProcessName").val()+$("#newProcessDes").val())
+         var params = {"key":tabKey,"name":$("#newProcessName").val(),"description":$("#newProcessDes").val()};
+        $.ajax({
+            url : "/bpm/manager/model/processInfoSave",
+            data : params,
+            type : "post",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('新建成功', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                    ProcessModalReflash();
+                }else {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('新建失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        });
+//        ProcessModalReflash();
+    };
+    //复制流程 111
+    function copyProcessAjax(url, type, params) {
+        var delItems = selectProcessModal();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要复制的流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }else if(delItems.length>1){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('最多只能复制一个流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsName ="";
+        var paramsDesc ="";
+        var paramsAppkey ="";
+        var paramsModelId ="";
+//        var paramsTenantId ="";
+        for(var i=0;i<delItems.length;i++) {
+            if (i == 0) {
+                paramsName = paramsName + delItems[i].name;
+                paramsDesc = paramsDesc + delItems[i].description;
+                paramsAppkey = paramsAppkey + delItems[i].appKey;
+                paramsModelId = paramsModelId + delItems[i].id;
+//                paramsTenantId = paramsTenantId + delItems[i].tenantId;
+            } else {
+
+            }
+        }
+        var  params = {
+            "name":paramsName,
+            "description":paramsDesc,
+            "key":paramsAppkey,
+            "modelId":paramsModelId
+//            "tenantId":paramsTenantId
+        }
+        $.ajax({
+            url : "/bpm/manager/model/copyProcess",
+            data : params,
+            type : "POST",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    window.open("/bpm/porcess-editor/modeler.html?modelId="+result.id, "_blank");
+                }else {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('发布失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        });
+    };
+    //删除流程 111
+    function deleteAjax(url, type, params) {
+        var delItems = selectProcessModal();
+        if(delItems==""||delItems==null||delItems==undefined){
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('请先选择要删除的流程', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+            return;
+        }
+        var paramsId ="";
+        var paramsName ="";
+        var paramsKey ="";
+        for(var i=0;i<delItems.length;i++) {
+            if (i == 0) {
+                paramsId = paramsId + delItems[i].id;
+                paramsName = paramsName + delItems[i].name;
+                paramsKey = paramsKey + delItems[i].processKey;
+            } else {
+                paramsId = paramsId + ";"+ delItems[i].id ;
+                paramsName = paramsName +  ";"+ delItems[i].name;
+                paramsKey = paramsKey +  ";"+ delItems[i].processKey;
+            }
+        }
+        var  params = {
+            "source":paramsId,
+            "sourceMc":paramsName,
+            "processKey":paramsKey
+        }
+        $.ajax({
+            url : "/bpm/manager/model/processDel",
+            data : params,
+            type : "POST",
+            timeout : 10000,
+            cache : false,
+            beforeSend :function(xmlHttp){
+                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+            },
+            success : function(result) {
+                if (result.success == true) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('删除成功', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                    ProcessModalReflash();
+                }else {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('删除失败，错误信息：'+result.msg, {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            },
+            error : function(result) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('error', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        });
+    };
+//刷新 111
+    function ProcessModalReflash() {
+        processDesignAjax();
+        $("#selectProcessDesign").val("");
+    }
+
+
+
+  //获取勾选项 111
+  function selectDefineModal() {
+      var resultItems = [];
+      layui.use('table', function(){
+          var table = layui.table;
+          var checkStatus = table.checkStatus('processDefineModels');
+          resultItems = checkStatus.data;
+      });
+      return resultItems;
+  };
+  //搜索 222
+  function fiterDefineModal() {
+
+      var fiterActivation ="";
+      if($("#selectDefine").val()==0){
+          fiterActivation ="";
+      }else if($("#selectDefine").val()==1){
+          fiterActivation = 1;
+      }else {
+          fiterActivation = 0;
+      }
+//      alert(fiterActivation);
+      layui.use('table', function(){
+          var table = layui.table;
+          var fiterName = $("#selectDefine").val();
+          table.reload('processDefineModels', {
+              where: {
+                  state: fiterActivation
+              }
+              ,url: '/bpm/manager/processes/getBpmProcessDefinistionList?key='+tabKey+'&processKey=&query='
+              ,page: {
+                  curr: 1
+              }
+          });
+      })
+  };
+//  删除流程定义1 222
+  function deleteDefineAjax() {
+      var delItems = selectDefineModal();
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要删除的流程定义', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      layer.open({
+          type: 1 //此处以iframe举例
+          ,title: '删除流程信息'
+          ,area: ['350px', '260px']
+          ,shade: 0
+          ,maxmin: true
+          ,content: "<div class=\"row\" style='margin-top: 70px;\n" +
+          "    margin-right: auto;'>\n" +
+          "              <div class=\" col-sm-7\" style='text-align: right'>\n" +
+          "                是否删除其流程实例：\n" +
+          "              </div>\n" +
+          "              <div class=\" col-sm-5\">\n" +
+          "                <label class=\"switch switch-icon switch-primary-outline-alt\">\n" +
+          "                  <input type=\"checkbox\" class=\"switch-input\" checked=\"\" id=\"checkboxIdGetVal6\">\n" +
+          "                  <span class=\"switch-label\" data-on=\"\" data-off=\"\"></span>\n" +
+          "                  <span class=\"switch-handle\"></span>\n" +
+          "                </label>\n" +
+          "              </div>\n" +
+          "              </div>"
+          ,btn: ['取消', '确定'] //只是为了演示
+          ,yes: function(){
+//                $(that).click();
+//                layer.close();
+//              alert($('#checkboxIdGetVal6').is(':checked'));
+//              layer.closeAll();
+          }
+          ,btn2: function(){
+              var includeAllInstances ="";
+              if($('#checkboxIdGetVal6').is(':checked')) {
+                  includeAllInstances = true;
+              }else {
+                  includeAllInstances = false;
+              }
+//              alert(includeAllInstances);
+              layer.closeAll();
+              var deploymentId ="";
+              for(var i=0;i<delItems.length;i++) {
+                  if (i == 0) {
+                      deploymentId = deploymentId + delItems[i].deploymentId;
+                  } else {
+                      deploymentId = deploymentId + ";"+ delItems[i].deploymentId ;
+                  }
+              }
+              var  params = {
+                  "deploymentId":deploymentId,
+                  "includeAllInstances":includeAllInstances
+              }
+              $.ajax({
+                  url : "/bpm/manager/process/unDeployProcessDefinition",
+                  data : params,
+                  type : "POST",
+                  timeout : 10000,
+                  cache : false,
+                  beforeSend :function(xmlHttp){
+                      xmlHttp.setRequestHeader("If-Modified-Since","0");
+                      xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                  },
+                  success : function(result) {
+                      if (result.success == true) {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('删除流程定义成功', {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                          DefineModalReflash();
+                      }else {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('删除流程定义失败，错误信息：'+result.msg, {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                      }
+                  },
+                  error : function(result) {
+                      layui.use('layer', function(){
+                          var $ = layui.jquery, layer = layui.layer;
+                          layer.msg('error', {
+                              time: 20000,
+                              btn: ['明白了']
+                          });
+                      });
+                  }
+              });
+          }
+
+          ,zIndex: layer.zIndex //重点1
+          ,success: function(layero){
+//                layer.setTop(layero); //重点2
+          }
+      });
+
+
+  };
+  //激活
+function jihuoDefineAjax(url, type, params) {
+
+          layui.use('laydate', function(){
+          var laydate = layui.laydate;
+
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#clickTimetest1'
+              ,format: 'yyyy-MM-dd'
+          });
+          laydate.render({
+              elem: '#clickTimetest2'
+              ,type: 'time'
+              ,format: 'HH:mm:ss'
+          });
+      });
+
+    var delItems = selectDefineModal();
+    if(delItems==""||delItems==null||delItems==undefined){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('请先选择要激活的的流程定义', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+    if(delItems.length>1){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('一次只能操作一个流程定义', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+    var activation = true;
+    layer.open({
+        type: 1 //此处以iframe举例
+        ,title: '激活流程信息'
+        ,area: ['350px', '320px']
+        ,shade: 0
+        ,maxmin: true
+        ,content:$("#jiazaiTest")
+        ,btn: ['取消', '确定'] //只是为了演示
+        ,yes: function(){
+//                $(that).click();
+//                layer.close();
+            layer.closeAll();
+        }
+        ,btn2: function(){
+            var includeAllInstances ="";
+//            $('#clickTimetest1').val();
+//            $('#clickTimetest2').val();
+             var validationTime = $('#clickTimetest1').val()+"T"+$('#clickTimetest2').val();
+            if($('#checkboxIdGetVal1').is(':checked')) {
+                includeAllInstances = true;
+            }else {
+                includeAllInstances = false;
+            }
+//            alert(includeAllInstances);
+            layer.closeAll();
+            var deploymentId ="";
+            for(var i=0;i<delItems.length;i++) {
+                if (i == 0) {
+                    deploymentId = deploymentId + delItems[i].id;
+                } else {
+                    deploymentId = deploymentId + ";"+ delItems[i].id ;
+                }
+            }
+            var  params = {
+                "activation":activation,
+                "processDefinitionId":deploymentId,
+                "includeAllInstances":includeAllInstances,
+                "validationTime":validationTime
+            }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+            $.ajax({
+                url : "/bpm/manager/process/activateOrSuspendProcessDefintion",
+                data : params,
+                type : "POST",
+                timeout : 10000,
+                cache : false,
+                beforeSend :function(xmlHttp){
+                    xmlHttp.setRequestHeader("If-Modified-Since","0");
+                    xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                },
+                success : function(result) {
+                    if (result.success == true) {
+                        layui.use('layer', function(){
+                            var $ = layui.jquery, layer = layui.layer;
+                            layer.msg('激活流程定义成功', {
+                                time: 20000,
+                                btn: ['明白了']
+                            });
+                        });
+                        DefineModalReflash();
+                    }else {
+                        layui.use('layer', function(){
+                            var $ = layui.jquery, layer = layui.layer;
+                            layer.msg('激活流程定义失败，错误信息：'+result.msg, {
+                                time: 20000,
+                                btn: ['明白了']
+                            });
+                        });
+                    }
+                },
+                error : function(result) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('error', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            });
+        }
+
+        ,zIndex: layer.zIndex //重点1
+        ,success: function(layero){
+//                layer.setTop(layero); //重点2
+        }
+    });
+
+
+};
+//表中表
+function modelTestMore() {
+     $.ajax({
+       type : 'GET',
+       url : 'views/components/settop.html',
+       dataType : 'html',
+       cache : false,
+       async: false,
+       beforeSend : function() {
+       },
+       success : function(response) {
+           layer.open({
+               type: 1,
+               title: '流程实例详细信息',
+               area: ['1149px', '600px'],
+               content: response //注意，如果str是object，那么需要字符拼接。
+//               ,btn: ['取消', '确定'] //只是为了演示
+//               ,yes: function(){
+////                $(that).click();
+////                layer.close();
+//                   layer.closeAll();
+//               },no: function(){
+////                $(that).click();
+////                layer.close();
+//                   layer.closeAll();
+//               }
+           });
+       }
+     })
+//    var that = this;
+//    layui.use('layer', function(){
+//        var layer = layui.layer;
+////        var that = this;
+//        layer.open({
+//            type: 2 //此处以iframe举例
+//            ,title: '删除流程信息'
+//            ,area: ['390px', '260px']
+//            ,shade: 0
+//            ,maxmin: true
+////            ,offset: [ //为了演示，随机坐标
+////                Math.random()*($(window).height()-300)
+////                ,Math.random()*($(window).width()-390)
+////            ]
+////            ,content: 'http://layer.layui.com/test/settop.html'
+//            ,content: 'http://localhost:8088/bpm/views/components/settop.html'
+//            ,btn: ['取消', '确定'] //只是为了演示
+//            ,yes: function(){
+//                $("#ceshiGetId").click();
+////                layer.close();
+////                layer.closeAll();
+//            }
+//            ,btn2: function(){
+//                layer.closeAll();
+//            }
+//
+//            ,zIndex: layer.zIndex //重点1
+//            ,success: function(layero){
+////                layer.setTop(layero); //重点2
+//            }
+//        });
+//    });
+}
+  //暂停 222
+function zantinDefineAjax() {
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#clickTimetest1'
+            ,format: 'yyyy-MM-dd'
+        });
+        laydate.render({
+            elem: '#clickTimetest2'
+            ,type: 'time'
+            ,format: 'HH:mm:ss'
+        });
+    });
+
+    var delItems = selectDefineModal();
+    if(delItems==""||delItems==null||delItems==undefined){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('请先选择要暂停的流程定义', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+    if(delItems.length>1){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('一次只能操作一个流程定义', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+    var activation = false;
+//    alert($(this).attr('id'));
+//    if($(this).attr("id")=="jihuoGetId") {
+//        activation = true;
+//    }else {
+//        activation = false;
+//    }
+    layer.open({
+        type: 1 //此处以iframe举例
+        ,title: '暂停流程信息'
+        ,area: ['350px', '320px']
+        ,shade: 0
+        ,maxmin: true
+//            ,offset: [ //为了演示，随机坐标
+//                Math.random()*($(window).height()-300)
+//                ,Math.random()*($(window).width()-390)
+//            ]
+        ,content:$("#jiazaiTest")
+        ,btn: ['取消', '确定'] //只是为了演示
+        ,yes: function(){
+//                $(that).click();
+//                layer.close();
+            layer.closeAll();
+        }
+        ,btn2: function(){
+            var includeAllInstances ="";
+//            $('#clickTimetest1').val();
+//            $('#clickTimetest2').val();
+            var validationTime = $('#clickTimetest1').val()+"T"+$('#clickTimetest2').val();
+            if($('#checkboxIdGetVal1').is(':checked')) {
+                includeAllInstances = true;
+            }else {
+                includeAllInstances = false;
+            }
+//            alert(includeAllInstances);
+            layer.closeAll();
+            var deploymentId ="";
+            for(var i=0;i<delItems.length;i++) {
+                if (i == 0) {
+                    deploymentId = deploymentId + delItems[i].id;
+                } else {
+                    deploymentId = deploymentId + ";"+ delItems[i].id ;
+                }
+            }
+            var  params = {
+                "activation":activation,
+                "processDefinitionId":deploymentId,
+                "includeAllInstances":includeAllInstances,
+                "validationTime":validationTime
+            }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+            $.ajax({
+                url : "/bpm/manager/process/activateOrSuspendProcessDefintion",
+                data : params,
+                type : "POST",
+                timeout : 10000,
+                cache : false,
+                beforeSend :function(xmlHttp){
+                    xmlHttp.setRequestHeader("If-Modified-Since","0");
+                    xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                },
+                success : function(result) {
+                    if (result.success == true) {
+                        layui.use('layer', function(){
+                            var $ = layui.jquery, layer = layui.layer;
+                            layer.msg('暂停流程定义成功', {
+                                time: 20000,
+                                btn: ['明白了']
+                            });
+                        });
+                        DefineModalReflash();
+                    }else {
+                        layui.use('layer', function(){
+                            var $ = layui.jquery, layer = layui.layer;
+                            layer.msg('暂停流程定义失败，错误信息：'+result.msg, {
+                                time: 20000,
+                                btn: ['明白了']
+                            });
+                        });
+                    }
+                },
+                error : function(result) {
+                    layui.use('layer', function(){
+                        var $ = layui.jquery, layer = layui.layer;
+                        layer.msg('error', {
+                            time: 20000,
+                            btn: ['明白了']
+                        });
+                    });
+                }
+            });
+        }
+
+        ,zIndex: layer.zIndex //重点1
+        ,success: function(layero){
+//                layer.setTop(layero); //重点2
+        }
+    });
+
+
+};
+  //刷新 111
+  function DefineModalReflash() {
+      processDefineAjax();
+      $("#selectDefine").val(0);
+  }
+  function DefineModalReflash1() {
+//      fiterParameter.processDefinitionIdFiter = "";
+      fiterParameter.processKeyFiter = "";
+      processDefineAjax();
+      $("#selectDefine").val(0);
+  }
+
+
+
+  //获取勾选项 111 Instance
+  function selectInstanceModal() {
+      var resultItems = [];
+      layui.use('table', function(){
+          var table = layui.table;
+          var checkStatus = table.checkStatus('processInstanceModels'); //test即为基础参数id对应的值
+//            alert(checkStatus.data[0].description);
+//            console.log(checkStatus.data) //获取选中行的数据
+//            console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+//            console.log(checkStatus.isAll ) //表格是否全选
+          resultItems = checkStatus.data;
+      });
+      return resultItems;
+  }
+  //搜索 222
+  function fiterInstanceModal() {
+      layui.use('table', function(){
+          var table = layui.table;
+          var fiterName ="";
+          if($("#selectInstance").val()==0){
+              fiterName ="";
+          }else if($("#selectInstance").val()==1){
+              fiterName = 1;
+          }else {
+              fiterName = 2;
+          }
+//          var fiterName = $("#selectInstance").val();
+          var fiterName1 = $("#selectInstance1").val();
+          table.reload('processInstanceModels', {
+              where: {
+                  state: fiterName,
+                  keyword: fiterName1
+              }
+              ,url: '/bpm/manager/processInstances/getBpmProcessInstanceList?key='+tabKey+'&query=&processDefinitionId=&tenantId='
+              ,page: {
+                  curr: 1
+              }
+          });
+      })
+  };
+  //清空搜索 111
+  function clearInstanceModal() {
+      layui.use('table', function(){
+          var table = layui.table;
+          $("#selectInstance").val("0");
+          $("#selectInstance1").val("");
+          table.reload('processInstanceModels', {
+              where: {
+                  state: '',
+                  keyword: ''
+              }
+              ,url: '/bpm/manager/processInstances/getBpmProcessInstanceList?key='+tabKey+'&state=&query=&processDefinitionId=&tenantId='
+              ,page: {
+                  curr: 1
+              }
+          });
+      })
+  };
+  //删除流程实例 222
+  function deleteInstanceAjax(url, type, params) {
+      var delItems = selectInstanceModal();
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要删除的流程实例', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      layer.open({
+          type: 1 //此处以iframe举例
+          ,title: '删除流程信息'
+          ,area: ['450px', '300px']
+          ,shade: 0
+          ,maxmin: true
+//            ,offset: [ //为了演示，随机坐标
+//                Math.random()*($(window).height()-300)
+//                ,Math.random()*($(window).width()-390)
+//            ]
+          ,content: $("#testAreaId")
+          ,btn: ['取消', '确定'] //只是为了演示
+          ,yes: function(){
+//                $(that).click();
+//                layer.close();
+              layer.closeAll();
+          }
+          ,btn2: function(){
+                var reasonText = $("#testAreaIdArea").val();
+              var paramsId ="";
+//              var paramsName ="";
+              for(var i=0;i<delItems.length;i++) {
+                  if (i == 0) {
+                      paramsId = paramsId + delItems[i].processInstanceId;
+//              paramsName = paramsName + delItems[i].remark;
+                  } else {
+                      paramsId = paramsId + ";"+ delItems[i].processInstanceId ;
+//              paramsName = paramsName +  ";"+ delItems[i].remark;
+                  }
+              }
+              var  params = {
+                  "processInstanceId":paramsId,
+                  "deleteReason":reasonText
+//          "includeAllInstances":paramsName
+              }
+              $.ajax({
+                  url : "/bpm/manager/processInstance/DeleteProcessInstance",
+                  data : params,
+                  type : "POST",
+                  timeout : 10000,
+                  cache : false,
+                  beforeSend :function(xmlHttp){
+                      xmlHttp.setRequestHeader("If-Modified-Since","0");
+                      xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                  },
+                  success : function(result) {
+                      if (result.success == true) {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('删除成功', {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                          ProcessModalReflash();
+                      }else {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('删除失败，错误信息：'+result.msg, {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                      }
+                  },
+                  error : function(result) {
+                      layui.use('layer', function(){
+                          var $ = layui.jquery, layer = layui.layer;
+                          layer.msg('error', {
+                              time: 20000,
+                              btn: ['明白了']
+                          });
+                      });
+                  }
+              });
+          }
+
+          ,zIndex: layer.zIndex //重点1
+          ,success: function(layero){
+//                layer.setTop(layero); //重点2
+          }
+      });
+
+//      ProcessModalReflash();
+  };
+  //流程作业 333 是弹窗还是什么
+  function processWorkAjax(url, type, params) {
+//        alert($("#newProcessName").val()+$("#newProcessDes").val())
+      params = {"appKey":"'+tabKey+'","name":$("#newProcessName").val(),"description":$("#newProcessDes").val()};
+      $.ajax({
+          url : "/bpm/manager/model/processInfoSavexinjian",
+          data : params,
+          type : "post",
+          timeout : 10000,
+          cache : false,
+          beforeSend :function(xmlHttp){
+              xmlHttp.setRequestHeader("If-Modified-Since","0");
+              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+          },
+          success : function(result) {
+              InstanceModalReflash();
+          },
+          error : function(result) {
+              alert("error");
+          }
+      });
+      ProcessModalReflash();
+  };
+  //激活 222
+  function jihuoInstanceAjax(url, type, params) {
+      layui.use('laydate', function(){
+          var laydate = layui.laydate;
+
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#clickTimetest3'
+              ,format: 'yyyy-MM-dd'
+          });
+          laydate.render({
+              elem: '#clickTimetest4'
+              ,type: 'time'
+              ,format: 'HH:mm:ss'
+          });
+      });
+
+      var delItems = selectInstanceModal();
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要激活的的流程定义', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      if(delItems.length>1){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('一次只能操作一个流程定义', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      var activation = true;
+//    alert($(this).attr('id'));
+//    if($(this).attr("id")=="jihuoGetId") {
+//        activation = true;
+//    }else {
+//        activation = false;
+//    }
+      layer.open({
+          type: 1 //此处以iframe举例
+          ,title: '激活流程实例'
+          ,area: ['350px', '320px']
+          ,shade: 0
+          ,maxmin: true
+//            ,offset: [ //为了演示，随机坐标
+//                Math.random()*($(window).height()-300)
+//                ,Math.random()*($(window).width()-390)
+//            ]
+          ,content:$("#jiazaiTest1")
+          ,btn: ['取消', '确定'] //只是为了演示
+          ,yes: function(){
+//                $(that).click();
+//                layer.close();
+              layer.closeAll();
+          }
+          ,btn2: function(){
+//              var includeAllInstances ="";
+//            $('#clickTimetest1').val();
+//            $('#clickTimetest2').val();
+              var validationTime = $('#clickTimetest3').val()+"T"+$('#clickTimetest4').val();
+//              if($('#checkboxIdGetVal').is(':checked')) {
+//                  includeAllInstances = true;
+//              }else {
+//                  includeAllInstances = false;
+//              }
+//            alert(includeAllInstances);
+              layer.closeAll();
+              var deploymentId ="";
+              for(var i=0;i<delItems.length;i++) {
+                  if (i == 0) {
+                      deploymentId = deploymentId + delItems[i].processDefintionId;
+                  } else {
+                      deploymentId = deploymentId + ";"+ delItems[i].processDefintionId ;
+                  }
+              }
+              var  params = {
+                  "activation":activation,
+                  "processDefinitionId":deploymentId,
+//                  "includeAllInstances":includeAllInstances,
+//                  "validationTime":validationTime
+              }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+              $.ajax({
+                  url : "/bpm/manager/processInstance/activateOrSuspendProcessInstance",
+                  data : params,
+                  type : "POST",
+                  timeout : 10000,
+                  cache : false,
+                  beforeSend :function(xmlHttp){
+                      xmlHttp.setRequestHeader("If-Modified-Since","0");
+                      xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                  },
+                  success : function(result) {
+                      if (result.success == true) {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('激活流程实例成功', {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                          DefineModalReflash();
+                      }else {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('激活流程实例失败，错误信息：'+result.msg, {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                      }
+                  },
+                  error : function(result) {
+                      layui.use('layer', function(){
+                          var $ = layui.jquery, layer = layui.layer;
+                          layer.msg('error', {
+                              time: 20000,
+                              btn: ['明白了']
+                          });
+                      });
+                  }
+              });
+          }
+
+          ,zIndex: layer.zIndex //重点1
+          ,success: function(layero){
+//                layer.setTop(layero); //重点2
+          }
+      });
+
+  };
+  //暂停 222
+  function zantinInstanceAjax(url, type, params) {
+      layui.use('laydate', function(){
+          var laydate = layui.laydate;
+
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#clickTimetest3'
+              ,format: 'yyyy-MM-dd'
+          });
+          laydate.render({
+              elem: '#clickTimetest4'
+              ,type: 'time'
+              ,format: 'HH:mm:ss'
+          });
+      });
+
+      var delItems = selectInstanceModal();
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要暂停的的流程实例', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      if(delItems.length>1){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('一次只能操作一个流程实例', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      var activation = false;
+//    alert($(this).attr('id'));
+//    if($(this).attr("id")=="jihuoGetId") {
+//        activation = true;
+//    }else {
+//        activation = false;
+//    }
+      layer.open({
+          type: 1 //此处以iframe举例
+          ,title: '暂停流程实例'
+          ,area: ['350px', '320px']
+          ,shade: 0
+          ,maxmin: true
+//            ,offset: [ //为了演示，随机坐标
+//                Math.random()*($(window).height()-300)
+//                ,Math.random()*($(window).width()-390)
+//            ]
+          ,content:$("#jiazaiTest1")
+          ,btn: ['取消', '确定'] //只是为了演示
+          ,yes: function(){
+//                $(that).click();
+//                layer.close();
+              layer.closeAll();
+          }
+          ,btn2: function(){
+//              var includeAllInstances ="";
+//            $('#clickTimetest1').val();
+//            $('#clickTimetest2').val();
+              var validationTime = $('#clickTimetest3').val()+"T"+$('#clickTimetest4').val();
+//              if($('#checkboxIdGetVal').is(':checked')) {
+//                  includeAllInstances = true;
+//              }else {
+//                  includeAllInstances = false;
+//              }
+//            alert(includeAllInstances);
+              layer.closeAll();
+              var deploymentId ="";
+              for(var i=0;i<delItems.length;i++) {
+                  if (i == 0) {
+                      deploymentId = deploymentId + delItems[i].processDefintionId;
+                  } else {
+                      deploymentId = deploymentId + ";"+ delItems[i].processDefintionId ;
+                  }
+              }
+              var  params = {
+                  "activation":activation,
+                  "processDefinitionId":deploymentId,
+//                  "includeAllInstances":includeAllInstances,
+//                  "validationTime":validationTime
+              }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+              $.ajax({
+                  url : "/bpm/manager/processInstance/activateOrSuspendProcessInstance",
+                  data : params,
+                  type : "POST",
+                  timeout : 10000,
+                  cache : false,
+                  beforeSend :function(xmlHttp){
+                      xmlHttp.setRequestHeader("If-Modified-Since","0");
+                      xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                  },
+                  success : function(result) {
+                      if (result.success == true) {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('暂停流程实例成功', {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                          DefineModalReflash();
+                      }else {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('暂停流程实例失败，错误信息：'+result.msg, {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                      }
+                  },
+                  error : function(result) {
+                      layui.use('layer', function(){
+                          var $ = layui.jquery, layer = layui.layer;
+                          layer.msg('error', {
+                              time: 20000,
+                              btn: ['明白了']
+                          });
+                      });
+                  }
+              });
+          }
+
+          ,zIndex: layer.zIndex //重点1
+          ,success: function(layero){
+//                layer.setTop(layero); //重点2
+          }
+      });
+
+  };
+  //刷新 111
+  function InstanceModalReflash() {
+      processInstanceAjax();
+     $("#selectInstance").val(0);
+     $("#selectInstance1").val("");
+  }
+  function InstanceModalReflash1() {
+//      fiterParameter.processKeyFiter = "";
+      fiterParameter.processDefinitionIdFiter = "";
+      processInstanceAjax();
+     $("#selectInstance").val(0);
+     $("#selectInstance1").val("");
+  }
+
+  //获取勾选项 111 Timing
+  function selectTimingModal() {
+      var resultItems = [];
+      layui.use('table', function(){
+          var table = layui.table;
+          var checkStatus = table.checkStatus('processTimingModels'); //test即为基础参数id对应的值
+//            alert(checkStatus.data[0].description);
+//            console.log(checkStatus.data) //获取选中行的数据
+//            console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+//            console.log(checkStatus.isAll ) //表格是否全选
+          resultItems = checkStatus.data;
+      });
+      return resultItems;
+  }
+  //执行 222
+  function startTimingAjax(url, type, params) {
+      var delItems = selectTimingModal();
+      alert(delItems[0].id);
+      $.ajax({
+          url : url,
+          data : params,
+          type : type,
+          timeout : 10000,
+          cache : false,
+          beforeSend :function(xmlHttp){
+              xmlHttp.setRequestHeader("If-Modified-Since","0");
+              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+          },
+          success : function(result) {
+              TimingModalReflash();
+          },
+          error : function(result) {
+              alert("error");
+          }
+      });
+  };
+  //删除定时流程 222
+  function deleteTimingAjax(url, type, params) {
+      var delItems = selectTimingModal();
+      alert(delItems[0].id);
+//        $.ajax({
+//            url : url,
+//            data : params,
+//            type : type,
+//            timeout : 10000,
+//            cache : false,
+//            beforeSend :function(xmlHttp){
+//                xmlHttp.setRequestHeader("If-Modified-Since","0");
+//                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+//            },
+//            success : function(result) {
+//TimingModalReflash();
+//            },
+//            error : function(result) {
+//                alert("error");
+//            }
+//        });
+//      ProcessModalReflash();
+  };
+  //刷新 111
+  function TimingModalReflash() {
+      processTimingAjax();
+  }
+
+  //获取勾选项 111 Start
+  function selectStartModal() {
+      var resultItems = [];
+      layui.use('table', function(){
+          var table = layui.table;
+          var checkStatus = table.checkStatus('processStartModels'); //test即为基础参数id对应的值
+//            alert(checkStatus.data[0].description);
+//            console.log(checkStatus.data) //获取选中行的数据
+//            console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+//            console.log(checkStatus.isAll ) //表格是否全选
+          resultItems = checkStatus.data;
+      });
+      return resultItems;
+  }
+//搜索 222
+function fiterStartModal() {
+    layui.use('table', function(){
+        var table = layui.table;
+//        var fiterName ="";
+//        if($("#selectInstance").val()==0){
+//            fiterName ="";
+//        }else if($("#selectInstance").val()==1){
+//            fiterName = 1;
+//        }else {
+//            fiterName = 2;
+//        }
+//          var fiterName = $("#selectInstance").val();
+        var fiterName1 = $("#prependedInput5").val();
+        table.reload('processStartModels', {
+            where: {
+//                state: fiterName,
+                keyword: fiterName1
+            }
+            ,url: '/bpm/manager/job/findStartJobList?key='+tabKey+''
+            ,page: {
+                curr: 1
+            }
+        });
+    })
+};
+//清空搜索 111
+function clearStartModal() {
+    layui.use('table', function(){
+        var table = layui.table;
+//        var fiterName ="";
+//        if($("#selectInstance").val()==0){
+//            fiterName ="";
+//        }else if($("#selectInstance").val()==1){
+//            fiterName = 1;
+//        }else {
+//            fiterName = 2;
+//        }
+//          var fiterName = $("#selectInstance").val();
+        $("#prependedInput5").val("");
+        table.reload('processStartModels', {
+            where: {
+//                state: fiterName,
+                keyword: ''
+            }
+            ,url: '/bpm/manager/job/findStartJobList?key='+tabKey+''
+            ,page: {
+                curr: 1
+            }
+        });
+    })
+};
+  //执行 222
+  function startStartAjax() {
+      var delItems = selectStartModal();
+
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要执行的的流程作业', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      if(delItems.length>1){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('一次只能操作一个流程定义', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+
+              var deploymentId ="";
+              for(var i=0;i<delItems.length;i++) {
+                  if (i == 0) {
+                      deploymentId = deploymentId + delItems[i].id;
+                  } else {
+                      deploymentId = deploymentId + ";"+ delItems[i].id ;
+                  }
+              }
+              var  params = {
+                  "jobId":delItems[0].id,
+                  "isDeleteJob": false
+              }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+              $.ajax({
+                  url : "/bpm/manager/job/executeOrDeleteJob",
+                  data : params,
+                  type : "POST",
+                  timeout : 10000,
+                  cache : false,
+                  beforeSend :function(xmlHttp){
+                      xmlHttp.setRequestHeader("If-Modified-Since","0");
+                      xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                  },
+                  success : function(result) {
+                      if (result.success == true) {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('执行流程作业成功', {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                          DefineModalReflash();
+                      }else {
+                          layui.use('layer', function(){
+                              var $ = layui.jquery, layer = layui.layer;
+                              layer.msg('执行流程作业失败，错误信息：'+result.msg, {
+                                  time: 20000,
+                                  btn: ['明白了']
+                              });
+                          });
+                      }
+                  },
+                  error : function(result) {
+                      layui.use('layer', function(){
+                          var $ = layui.jquery, layer = layui.layer;
+                          layer.msg('error', {
+                              time: 20000,
+                              btn: ['明白了']
+                          });
+                      });
+                  }
+              });
+
+
+
+
+  };
+  //删除启动定时流程 222
+function deleteStartAjax() {
+    var delItems = selectStartModal();
+
+    if(delItems==""||delItems==null||delItems==undefined){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('请先选择要删除的的流程作业', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+    if(delItems.length>1){
+        layui.use('layer', function(){
+            var $ = layui.jquery, layer = layui.layer;
+            layer.msg('一次只能操作一个流程作业', {
+                time: 20000,
+                btn: ['明白了']
+            });
+        });
+        return;
+    }
+
+    var deploymentId ="";
+    for(var i=0;i<delItems.length;i++) {
+        if (i == 0) {
+            deploymentId = deploymentId + delItems[i].id;
+        } else {
+            deploymentId = deploymentId + ";"+ delItems[i].id ;
+        }
+    }
+    var  params = {
+        "jobId":delItems[0].id,
+        "isDeleteJob": true
+    }
+//            alert(activation+deploymentId+includeAllInstances+validationTime);
+    $.ajax({
+        url : "/bpm/manager/job/executeOrDeleteJob",
+        data : params,
+        type : "POST",
+        timeout : 10000,
+        cache : false,
+        beforeSend :function(xmlHttp){
+            xmlHttp.setRequestHeader("If-Modified-Since","0");
+            xmlHttp.setRequestHeader("Cache-Control","no-cache");
+        },
+        success : function(result) {
+            if (result.success == true) {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('删除流程作业成功', {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+                DefineModalReflash();
+            }else {
+                layui.use('layer', function(){
+                    var $ = layui.jquery, layer = layui.layer;
+                    layer.msg('删除流程作业失败，错误信息：'+result.msg, {
+                        time: 20000,
+                        btn: ['明白了']
+                    });
+                });
+            }
+        },
+        error : function(result) {
+            layui.use('layer', function(){
+                var $ = layui.jquery, layer = layui.layer;
+                layer.msg('error', {
+                    time: 20000,
+                    btn: ['明白了']
+                });
+            });
+        }
+    });
+
+
+
+
+};
+  //刷新 111
+  function StartModalReflash() {
+      processStartAjax();
+  }
+
+  //获取勾选项 111 DataRule
+  function loadDataRuleModal() {
+      var resultItems = [];
+      layui.use('table', function(){
+          var table = layui.table;
+          var checkStatus = table.checkStatus('loadDataRuleModels'); //test即为基础参数id对应的值
+//            alert(checkStatus.data[0].description);
+//            console.log(checkStatus.data) //获取选中行的数据
+//            console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+//            console.log(checkStatus.isAll ) //表格是否全选
+          resultItems = checkStatus.data;
+      });
+      return resultItems;
+  }
+  //搜索 222
+  function fiterDataRuleModal() {
+      layui.use('table', function(){
+          var table = layui.table;
+//          var fiterName = $("#dataRuleFiter").val();
+//          var fiterName1 = $("#dataRuleFiter1").val();
+//          var fiterName2 = $("#dataRuleFiter2").val();
+          var ruleName = $("#dataRuleFiter1").val();
+          var ruleScript = $("#dataRuleFiter2").val();
+
+          table.reload('loadDataRuleModels', {
+              where: {
+                  RULE_NAME: ruleName,
+                  RULE_SCRIPT:ruleScript
+              }
+              ,url: '/bpm/rules/query_rules'
+              ,page: {
+                  curr: 1
+              }
+          });
+      })
+  };
+  //清空搜索 111
+  function clearDataRuleModal() {
+      layui.use('table', function(){
+          var table = layui.table;
+          $("#dataRuleFiter").val("");
+         $("#dataRuleFiter1").val("");
+         $("#dataRuleFiter2").val("");
+          table.reload('processDesignModels', {
+              where: {
+                  keyword: ""
+              }
+              ,url: '/bpm/manager/models/query_Models?key='+tabKey+'&_=1512374250213'
+              ,page: {
+                  curr: 1
+              }
+          });
+      })
+  };
+  //增加规则 222
+  function addDataRuleAjax(url, type, params) {
+      $("#newProcessRuleScript").val();
+      var params = {"RULE_NAME":$("#newProcessRuleName").val(),"RULE_SCRIPT":$("#newProcessRuleScript").val(),"TYPE":'ADD'};
+      $.ajax({
+          url : "/bpm/rule/bpmRuleManager",
+          data : params,
+          type : "post",
+          timeout : 10000,
+          cache : false,
+          beforeSend :function(xmlHttp){
+              xmlHttp.setRequestHeader("If-Modified-Since","0");
+              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+          },
+          success : function(result) {
+              if (result.success == true) {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('新增规则成功', {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+                  loadDataRuleReflash();
+              }else {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('新增规则失败，错误信息：'+result.msg, {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+              }
+          },
+          error : function(result) {
+              layui.use('layer', function(){
+                  var $ = layui.jquery, layer = layui.layer;
+                  layer.msg('error', {
+                      time: 20000,
+                      btn: ['明白了']
+                  });
+              });
+          }
+      });
+
+  };
+  //修改规则 222
+  function modifyDataRuleAjax(url, type, params) {
+      var delItems = loadDataRuleModal();
+      if(delItems==""||delItems==null||delItems==undefined){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('请先选择要修改的的规则', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+      if(delItems.length>1){
+          layui.use('layer', function(){
+              var $ = layui.jquery, layer = layui.layer;
+              layer.msg('一次只能操作一个规则', {
+                  time: 20000,
+                  btn: ['明白了']
+              });
+          });
+          return;
+      }
+if(delItems.length==1){
+    $("#modelTempId1").click();
+//    alert(delItems[0].ruleName+delItems[0].ruleScript);
+    $("#newProcessRuleName1").val(delItems[0].ruleName);
+    $("#newProcessRuleScript1").val(delItems[0].ruleScript);
+}
+
+
+//      var params = {"RULE_NAME":$("#newProcessRuleName").val(),"RULE_SCRIPT":$("#newProcessRuleScript").val(),"TYPE":'CHANGE',"ID":delItems.id,"CODE":delItems.ruleCode};
+//      alert(delItems[0].id);
+//        $.ajax({
+//            url : url,
+//            data : params,
+//            type : type,
+//            timeout : 10000,
+//            cache : false,
+//            beforeSend :function(xmlHttp){
+//                xmlHttp.setRequestHeader("If-Modified-Since","0");
+//                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+//            },
+//            success : function(result) {
+//loadDataRuleReflash();
+//            },
+//            error : function(result) {
+//                alert("error");
+//            }
+//        });
+//      ProcessModalReflash();
+  };
+  function modifyDataRuleAjaxBef(url, type, params) {
+      var delItems = loadDataRuleModal();
+//      $("#newProcessRuleName1").val(delItems.ruleName);
+//      $("#newProcessRuleScript1").val(delItems.ruleScript);
+      var params = {"RULE_NAME":$("#newProcessRuleName1").val(),"RULE_SCRIPT":$("#newProcessRuleScript1").val(),"TYPE":'CHG',"ID":delItems[0].id,"CODE":delItems[0].ruleCode};
+//      alert(delItems[0].id);
+      $.ajax({
+          url : "/bpm/rule/bpmRuleManager",
+          data : params,
+          type : "post",
+          timeout : 10000,
+          cache : false,
+          beforeSend :function(xmlHttp){
+              xmlHttp.setRequestHeader("If-Modified-Since","0");
+              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+          },
+          success : function(result) {
+              if (result.success == true) {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('修改规则成功', {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+                  loadDataRuleReflash();
+              }else {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('修改规则失败，错误信息：'+result.msg, {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+              }
+          },
+          error : function(result) {
+              layui.use('layer', function(){
+                  var $ = layui.jquery, layer = layui.layer;
+                  layer.msg('error', {
+                      time: 20000,
+                      btn: ['明白了']
+                  });
+              });
+          }
+      });
+//      ProcessModalReflash();
+  };
+  //删除规则 222
+  function deleteDataRuleAjax(url, type, params) {
+      var delItems = loadDataRuleModal();
+//      $("#newProcessRuleName1").val(delItems.ruleName);
+//      $("#newProcessRuleScript1").val(delItems.ruleScript);
+      var params = {"TYPE":'DEL',"ID":delItems[0].id};
+//      alert(delItems[0].id);
+      $.ajax({
+          url : "/bpm/rule/bpmRuleManager",
+          data : params,
+          type : "post",
+          timeout : 10000,
+          cache : false,
+          beforeSend :function(xmlHttp){
+              xmlHttp.setRequestHeader("If-Modified-Since","0");
+              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+          },
+          success : function(result) {
+              if (result.success == true) {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('删除规则成功', {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+                  loadDataRuleReflash();
+              }else {
+                  layui.use('layer', function(){
+                      var $ = layui.jquery, layer = layui.layer;
+                      layer.msg('删除规则失败，错误信息：'+result.msg, {
+                          time: 20000,
+                          btn: ['明白了']
+                      });
+                  });
+              }
+          },
+          error : function(result) {
+              layui.use('layer', function(){
+                  var $ = layui.jquery, layer = layui.layer;
+                  layer.msg('error', {
+                      time: 20000,
+                      btn: ['明白了']
+                  });
+              });
+          }
+      });
+  };
+  //刷新 111
+  function loadDataRuleReflash() {
+      $("#dataRuleFiter1").val("");
+      $("#dataRuleFiter2").val("");
+      loadDataRuleAjax();
+  }
+
+  //获取颜色
+  function sendColor(url, type, params) {
+      alert($(this).attr("id"));
+      return $(this).attr("id");
+  };
+  //修改历史节点 222
+  function modifylishijiedianAjax(url, type, params) {
+      var colorItem = sendColor();
+      alert(colorItem);
+//        $.ajax({
+//            url : url,
+//            data : params,
+//            type : type,
+//            timeout : 10000,
+//            cache : false,
+//            beforeSend :function(xmlHttp){
+//                xmlHttp.setRequestHeader("If-Modified-Since","0");
+//                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+//            },
+//            success : function(result) {
+//                loadDataColorReflash();
+//            },
+//            error : function(result) {
+//                alert("error");
+//            }
+//        });
+//      ProcessModalReflash();
+  };
+  //修改当前节点 222
+  function modifydanqianjiedianAjax(url, type, params) {
+      var colorItem = sendColor();
+      alert(colorItem);
+//        $.ajax({
+//            url : url,
+//            data : params,
+//            type : type,
+//            timeout : 10000,
+//            cache : false,
+//            beforeSend :function(xmlHttp){
+//                xmlHttp.setRequestHeader("If-Modified-Since","0");
+//                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+//            },
+//            success : function(result) {
+//                loadDataColorReflash();
+//            },
+//            error : function(result) {
+//                alert("error");
+//            }
+//        });
+//      ProcessModalReflash();
+  };
+  //刷新 111
+  function loadDataColorReflash() {
+      loadDataColorAjax();
+  }
+
+  //流程编辑
+  layui.use('table', function(){
+      var table = layui.table;
+      table.on('tool(processDesignModels)', function(obj){
+          var data = obj.data;
+//          window.location.href="http://localhost:8088/bpm/porcess-editor/modeler.html?modelId="+data.id;
+          if(obj.event === 'detail'){
+              window.open("/bpm/porcess-editor/modeler.html?modelId="+data.id, "_blank");
+          } else if(obj.event === 'detailDefine'){
+              $("#getDownLis").find('a').removeClass('active');
+//              $('nav .nav li .nav-link').removeClass('active');
+              $("#processDefineAjax").addClass('active');
+              $("#processDesign").hide();
+              $("#processInstance").hide();
+              $("#processTiming").hide();
+              $("#processStart").hide();
+              $("#processDefine").show();
+              fiterParameter.processKeyFiter = data.processKey;
+              layui.use('table', function(){
+                  var table = layui.table;
+                  table.render({
+                      elem: '#processDefineModels'
+                      ,url:'/bpm/manager/processes/getBpmProcessDefinistionList?key='+tabKey+'&state=&query='
+                      ,cols: [[
+                          {type:'checkbox'}
+                          ,{field:'name', title: '流程名称',align:'center', sort: true}
+                          ,{field:'description',align:'center',title: '流程描述'}
+                          ,{field:'processKey',  title: '流程KEY', align:'center',sort: true}
+                          ,{field:'version', title: '版本号', align:'center'}
+                          ,{field:'deployDateTime', align:'center', title: '发布时间',sort: true}
+                          ,{field:'state', title: '当前状态',align:'center',toolbar: '#barDemo3'}
+                          ,{field:'', title: '流程实例',align:'center',toolbar: '#barDemo10'}
+                          ,{fixed: '',title:'流程操作', align:'center', toolbar: '#barDemo1'}
+                      ]],
+                      where: {
+                          processKey: data.processKey
+                      }
+                      ,page: true
+                  });
+              });
+          }else {
+              return;
+          }
+
+      });
+  });
+
+  layui.use('table', function(){
+      var table = layui.table;
+      table.on('tool(processDefineModels)', function(obj){
+          var dataDefine = obj.data;
+//          alert("123");
+          if(obj.event === 'detailZanTing'||obj.event === 'detailJiHuo'){
+              layui.use('laydate', function(){
+                  var laydate = layui.laydate;
+
+                  //执行一个laydate实例
+                  laydate.render({
+                      elem: '#clickTimetest1'
+                      ,format: 'yyyy-MM-dd'
+                  });
+                  laydate.render({
+                      elem: '#clickTimetest2'
+                      ,type: 'time'
+                      ,format: 'HH:mm:ss'
+                  });
+              });
+//          var delItems = selectDefineModal();
+//          if(delItems==""||delItems==null||delItems==undefined){
+//              layui.use('layer', function(){
+//                  var $ = layui.jquery, layer = layui.layer;
+//                  layer.msg('请先选择要激活的的流程定义', {
+//                      time: 20000,
+//                      btn: ['明白了']
+//                  });
+//              });
+//              return;
+//          }
+//          if(delItems.length>1){
+//              layui.use('layer', function(){
+//                  var $ = layui.jquery, layer = layui.layer;
+//                  layer.msg('一次只能操作一个流程定义', {
+//                      time: 20000,
+//                      btn: ['明白了']
+//                  });
+//              });
+//              return;
+//          }
+              var activation = '';
+              if(dataDefine.state==1){
+                  activation = false;
+              }else {
+                  activation = true;
+              }
+//    alert($(this).attr('id'));
+//    if($(this).attr("id")=="jihuoGetId") {
+//        activation = true;
+//    }else {
+//        activation = false;
+//    }
+              layer.open({
+                  type: 1 //此处以iframe举例
+                  ,title: '操作流程信息'
+                  ,area: ['350px', '320px']
+                  ,shade: 0
+                  ,maxmin: true
+//            ,offset: [ //为了演示，随机坐标
+//                Math.random()*($(window).height()-300)
+//                ,Math.random()*($(window).width()-390)
+//            ]
+                  ,content:$("#jiazaiTest")
+                  ,btn: ['取消', '确定'] //只是为了演示
+                  ,yes: function(){
+//                $(that).click();
+//                layer.close();
+                      layer.closeAll();
+//                  alert($('#checkboxIdGetVal1').is(':checked'));
+                  }
+                  ,btn2: function(){
+                      var includeAllInstances ="";
+//            $('#clickTimetest1').val();
+//            $('#clickTimetest2').val();
+                      var validationTime = $('#clickTimetest1').val()+"T"+$('#clickTimetest2').val();
+                      if($('#checkboxIdGetVal1').is(':checked')) {
+                          includeAllInstances = true;
+                      }else {
+                          includeAllInstances = false;
+                      }
+//            alert(includeAllInstances);
+                      layer.closeAll();
+                      var deploymentId = dataDefine.id;
+//                  for(var i=0;i<delItems.length;i++) {
+//                      if (i == 0) {
+//                          deploymentId = deploymentId + delItems[i].deploymentId;
+//                      } else {
+//                          deploymentId = deploymentId + ";"+ delItems[i].deploymentId ;
+//                      }
+//                  }
+                      var  params = {
+                          "activation":activation,
+                          "processDefinitionId":deploymentId,
+                          "includeAllInstances":includeAllInstances,
+                          "validationTime":validationTime
+                      }
+//                  alert(activation+deploymentId+includeAllInstances+validationTime);
+                      $.ajax({
+                          url : "/bpm/manager/process/activateOrSuspendProcessDefintion",
+                          data : params,
+                          type : "POST",
+                          timeout : 10000,
+                          cache : false,
+                          beforeSend :function(xmlHttp){
+                              xmlHttp.setRequestHeader("If-Modified-Since","0");
+                              xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                          },
+                          success : function(result) {
+                              if (result.success == true) {
+                                  layui.use('layer', function(){
+                                      var $ = layui.jquery, layer = layui.layer;
+                                      layer.msg('激活流程定义成功', {
+                                          time: 20000,
+                                          btn: ['明白了']
+                                      });
+                                  });
+                                  DefineModalReflash();
+                              }else {
+                                  layui.use('layer', function(){
+                                      var $ = layui.jquery, layer = layui.layer;
+                                      layer.msg('激活流程定义失败，错误信息：'+result.msg, {
+                                          time: 20000,
+                                          btn: ['明白了']
+                                      });
+                                  });
+                              }
+                          },
+                          error : function(result) {
+                              layui.use('layer', function(){
+                                  var $ = layui.jquery, layer = layui.layer;
+                                  layer.msg('error', {
+                                      time: 20000,
+                                      btn: ['明白了']
+                                  });
+                              });
+                          }
+                      });
+                  }
+
+                  ,zIndex: layer.zIndex //重点1
+                  ,success: function(layero){
+//                layer.setTop(layero); //重点2
+                  }
+              });
+
+          } else if(obj.event === 'detailShiLi'){
+
+              $("#getDownLis").find('a').removeClass('active');
+//              $('nav .nav li .nav-link').removeClass('active');
+              $("#processInstanceAjax").addClass('active');
+              $("#processDesign").hide();
+              $("#processInstance").show();
+              $("#processTiming").hide();
+              $("#processStart").hide();
+              $("#processDefine").hide();
+              fiterParameter.processDefinitionIdFiter = dataDefine.id
+              layui.use('table', function(){
+                  var table = layui.table;
+                  table.render({
+                      elem: '#processInstanceModels'
+                      ,url:'/bpm/manager/processInstances/getBpmProcessInstanceList?key='+tabKey+'&state=&query=&keyword=&tenantId='
+                      ,cols: [[
+                          {type:'checkbox'}
+                          ,{field:'businessKey', title: '业务KEY', align:'center',sort: true}
+                          ,{field:'startTime',title: '创建时间', sort: true}
+                          ,{field:'endTime',  title: '结束时间',align:'center', sort: true}
+                          ,{field:'startUserId', title: '发起人ID',align:'center', sort: true}
+                          ,{field:'startUserName',align:'center',  title: '发起人'}
+                          ,{field:'durationTime', title: '持续时间',align:'center'}
+                          ,{field:'processInstanceId', align:'center', title: '实例ID'}
+                          ,{field:'remark', align:'center', title: '实例描述'}
+                          ,{fixed: '',title:'详细信息', align:'center', toolbar: '#barDemo4'}
+                      ]],
+                      where: {
+//                          processKey: dataDefine.processKey,
+                          processDefinitionId: dataDefine.id
+                      }
+                      ,page: true
+                  });
+              });
+          }else {
+              return;
+          }
+
+//            window.location.href="http://localhost:8088/bpm/porcess-editor/modeler.html?modelId="+data.id;
+      });
+  });
+
+  layui.use('table', function(){
+    var table = layui.table;
+    table.on('tool(processInstanceModels)', function(obj){
+        var data = obj.data;
+        processInstanceIdTemp = data.processInstanceId;
+//        alert(processInstanceIdTemp);
+        modelTestMore();
+
+
+
+
+
+
+
+    });
+});
+
+//$("#tabItemName").delegate('click',function(){
+////    $("#tabItemName").attr("lay-id");
+//    alert("123123132");
+//});
+$("#tabItemName").on('click',function(){
+//    $("#tabItemName").attr("lay-id");
+    if($(this).attr("lay-id")==44){
+        $('#processDesignAjaxMain1').click();
+    }else if($(this).attr("lay-id")==55){
+        $('#processDesignAjaxMain2').click();
+    }else if($(this).attr("lay-id")==66){
+        $('#processDesignAjaxMain3').click();
+    }else {
+        return
+    }
+});
+$('#processDesignAjaxMain').on('click', function(){
+     tabKey = "hfb";
+     $("#tabItemName").html("住房公积金业务");
+     $("#tabItemName").attr("lay-id","11");
+    $('.layui-tab-title li').each(function(){
+            $(this).removeClass('layui-this');
+    });
+     $("#tabItemName").addClass('layui-this');
+
+});
+$('#processDesignAjaxMain1').on('click', function(){
+     tabKey = "im";
+    $("#tabItemName").html("资金管理业务");
+    $("#tabItemName").attr("lay-id","44");
+    $('.layui-tab-title li').each(function(){
+        $(this).removeClass('layui-this');
+    });
+//    $("#tabItemName1").show();
+//    $("#tabItemName2").hide();
+//    $("#tabItemName3").hide();
+//    $("#tabItemName").hide();
+
+    $("#tabItemName").addClass('layui-this');
+//    $("#loadDataTables").show();
+//    $("#loadDataRule").hide();
+//    $("#loadDataColor").hide();
+//    $("#getData1").click();
+});
+$('#processDesignAjaxMain2').on('click', function(){
+     tabKey = "archive";
+    $("#tabItemName").html("电子档案业务");
+    $("#tabItemName").attr("lay-id","55");
+    $('.layui-tab-title li').each(function(){
+        $(this).removeClass('layui-this');
+    });
+    $("#tabItemName").addClass('layui-this');
+//    $("#loadDataTables").show();
+//    $("#loadDataRule").hide();
+//    $("#loadDataColor").hide();
+//    $("#getData1").click();
+});
+$('#processDesignAjaxMain3').on('click', function(){
+     tabKey = "fm";
+    $("#tabItemName").html("财务管理业务");
+    $("#tabItemName").attr("lay-id","66");
+    $('.layui-tab-title li').each(function(){
+        $(this).removeClass('layui-this');
+    });
+    $("#tabItemName").addClass('layui-this');
+//    $("#loadDataTables").show();
+//    $("#loadDataRule").hide();
+//    $("#loadDataColor").hide();
+//    $("#getData1").click();
+});
+
+
+
+</script>
+</body>
+<div id="jiazaiTest" style="display: none">
+<div class="layui-inline" style='margin-top: 50px;margin-left: 17px;'>
+                   <label class="layui-form-label">日期：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="clickTimetest1" placeholder="yyyy年MM月dd日">
+                      </div>
+                  </div>
+<div class="layui-inline" style='margin-left: 17px;'>
+                  <label class="layui-form-label">时间：</label>
+                  <div class="layui-input-inline">
+                      <input type="text" class="layui-input" id="clickTimetest2" placeholder="H点m分">
+                    </div>
+                </div>
+<div class="row" style='margin-top: 10px;margin-right: auto;'>
+                <div class=" col-sm-7" style='text-align: right'>
+                  是否操作其流程实例：
+                </div>
+              <div class=" col-sm-5">
+                <label class="switch switch-icon switch-primary-outline-alt">
+                  <input type="checkbox" class="switch-input" checked="" id="checkboxIdGetVal1">
+                  <span class="switch-label" data-on="" data-off=""></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+              </div>
+</div>
+<div id="jiazaiTest1" style="display: none">
+  <div class="layui-inline" style='margin-top: 50px;margin-left: 17px;'>
+    <label class="layui-form-label">日期：</label>
+    <div class="layui-input-inline">
+      <input type="text" class="layui-input" id="clickTimetest3" placeholder="yyyy年MM月dd日">
+    </div>
+  </div>
+  <div class="layui-inline" style='margin-left: 17px;'>
+    <label class="layui-form-label">时间：</label>
+    <div class="layui-input-inline">
+      <input type="text" class="layui-input" id="clickTimetest4" placeholder="H点m分">
+    </div>
+  </div>
+
+</div>
+<div id="testAreaId" class="layui-form-item layui-form-text row" style="display: none;margin-left: 0;margin-right: 0;margin-top: 20px;">
+  <div class="col-sm-3" style="text-align: right">删除原因：</div>
+  <div class="col-sm-9"><div class="layui-input-block" style="margin-left:0px">
+    <textarea id="testAreaIdArea" placeholder="请输入内容" class="layui-textarea" style="height: 170px;"></textarea>
+  </div></div>
+
+
+</div>
+</html>

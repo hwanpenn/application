@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Process Center">
+    <meta name="author" content="penn">
+    <meta name="keyword" content="ajax,jquery,process">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <title>流程管理中心</title>
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="layui/css/layui.css" rel="stylesheet">
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item px-3">
+            <a class="nav-link" href="#">超级管理员</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav ml-auto">
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="margin-right: 10px;">
+                <canvas id="myCanvas" width="40" height="40">
+                </canvas>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" style="text-align:center;min-width: 70px;" >
+                <a class="dropdown-item" href="#" style="width: 70px;min-width: 100px;padding: 4px;" onclick="userLogout()"><i class="fa fa-lock"></i> 退出系统</a>
+                <a class="dropdown-item" href="#" style="width: 70px;min-width: 100px;padding: 4px;" onclick="passwordChang()"><i class="fa fa-wrench"></i> 修改密码</a>
+
+            </div>
+        </li>
+
+    </ul>
+</header>
+<div class="app-body">
+    <!--<div class="card">-->
+        <!--<div style="padding: 0.40rem 1.25rem;" class="card-header">-->
+            <!--<div class="row">-->
+                <!--<div  class="col-md-3 input-prepend input-group">-->
+                    <!--<input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectPermissionTable" autocomplete="off">-->
+                    <!--<span class="input-group-addon" onclick="selectPermissionTable1()"><i class="fa fa-search"></i></span>-->
+                    <!--<span class="input-group-addon" onclick="selectPermissionTable2()"><i class="fa fa-close"></i></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="">-->
+                <!--<table class="layui-hide" id="superPermissionTableModel" lay-data="{id: 'superPermissionTableModel'}" lay-filter="superPermissionTableModel"></table>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="">-->
+    <div class="card-body">
+        <div style="padding: 0.40rem 1.25rem;" class="card-header">
+            <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                    <input class="form-control" size="16" type="text" placeholder="搜索" name="name" id="selectPermissionTable" autocomplete="off">
+                    <span class="input-group-addon" onclick="selectPermissionTable1()"><i class="fa fa-search"></i></span>
+                    <span class="input-group-addon" onclick="selectPermissionTable2()"><i class="fa fa-close"></i></span>
+                </div>
+            </div>
+        </div>
+        <table class="layui-hide" id="superPermissionTableModel" lay-data="{id: 'superPermissionTableModel'}" lay-filter="superPermissionTableModel"></table>
+    </div>
+    <!--</div>-->
+</div>
+
+<script type="text/html" id="barDemo12">
+    {{#  if(d.rolename == "未分配"){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="permissionAdd">增加</a>
+    {{#  } else { }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="permissionCancel">取消</a>
+    {{#  } }}
+</script>
+<script type="text/html" id="barDemo13">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="passwordReset">重置密码</a>
+</script>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="node_modules/pace-progress/pace.min.js"></script>
+<script src="node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="js/app.js"></script>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="dist/clipboard.min.js" charset="utf-8"></script>
+<script>
+    permissionAjax();
+    function permissionAjax() {
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#superPermissionTableModel'
+                ,url:'/bpm/queryManagers?keyword='
+                ,response: {
+                    countName: 'totalNumber', //数据总数的字段名称，默认：count
+                    dataName: 'items' //数据列表的字段名称，默认：data
+                }
+                ,cols: [[
+                    {type:'checkbox'}
+                    ,{field:'id', title: '编号',align:'center', sort: true}
+                    ,{field:'username',align:'center',title: '登入名'}
+                    ,{field:'caption',  title: '姓名', align:'center',sort: true}
+                    ,{field:'fzxbm', title: '中心编码', align:'center',sort: true}
+                    ,{field:'rolename', align:'center', title: '用户权限'}
+                    ,{field:'', title: '权限管理',align:'center',toolbar: '#barDemo12'}
+                    ,{field:'', title: '重置密码',align:'center',toolbar: '#barDemo13'}
+//                  ,{field:'', title: '流程实例',align:'center',toolbar: '#barDemo10'}
+//                  ,{fixed: '',title:'流程操作', align:'center', toolbar: '#barDemo1'}
+                ]],
+                where: {
+//                    processKey: fiterParameter.processKeyFiter
+                }
+                ,page: true
+            });
+        });
+    };
+    layui.use('table', function(){
+        var table = layui.table;
+        table.on('tool(superPermissionTableModel)', function(obj){
+            var data = obj.data;
+            var  params = {
+                "username":data.username,
+                "id":data.id,
+                "caption":data.caption,
+                "fzxbm":data.fzxbm,
+                "fzjbzxbm":data.fzjbzxbm,
+                "fjgbm":data.fjgbm
+            };
+            if(obj.event === 'permissionAdd'){
+                layui.use('layer', function(){
+                    var layer = layui.layer;
+                    layer.confirm('是否给该用户增加权限', {
+                        btn: ['取消', '确定'] //可以无限个按钮
+                        ,btn2: function(index, layero){
+
+                            $.ajax({
+                                url : "/bpm/admin/addAdmin",
+                                data : params,
+                                type : "POST",
+                                timeout : 10000,
+                                cache : false,
+                                beforeSend :function(xmlHttp){
+                                    xmlHttp.setRequestHeader("If-Modified-Since","0");
+                                    xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                                },
+                                success : function(result) {
+                                    if (result.success == true) {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('增加权限成功', {
+                                                time: 20000,
+                                                btn: ['明白了']
+                                            });
+                                        });
+                                        permissionAjax();
+                                    }else {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('增加权限失败，错误信息：'+result.msg, {
+                                                time: 20000,
+                                                btn: ['明白了']
+                                            });
+                                        });
+                                    }
+                                },
+                                error : function(result) {
+                                    layui.use('layer', function(){
+                                        var $ = layui.jquery, layer = layui.layer;
+                                        layer.msg('error', {
+                                            time: 20000,
+                                            btn: ['明白了']
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    }, function(index, layero){
+                        layer.close(layer.index);
+                    });
+                });
+
+            } else if(obj.event === 'permissionCancel'){
+                layui.use('layer', function(){
+                    var layer = layui.layer;
+                    layer.confirm('是否取消该用户权限', {
+                        btn: ['取消', '确定'] //可以无限个按钮
+                        ,btn2: function(index, layero){
+                            $.ajax({
+                                url : "/bpm/admin/deleteUser",
+                                data : params,
+                                type : "POST",
+                                timeout : 10000,
+                                cache : false,
+                                beforeSend :function(xmlHttp){
+                                    xmlHttp.setRequestHeader("If-Modified-Since","0");
+                                    xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                                },
+                                success : function(result) {
+                                    if (result.success == true) {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('取消权限成功', {
+                                                time: 20000,
+                                                btn: ['明白了'],
+                                            });
+                                        });
+                                        permissionAjax();
+                                    }else {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('取消权限失败，错误信息：'+result.msg, {
+                                                time: 20000,
+                                                btn: ['明白了']
+                                            });
+                                        });
+                                    }
+                                },
+                                error : function(result) {
+                                    layui.use('layer', function(){
+                                        var $ = layui.jquery, layer = layui.layer;
+                                        layer.msg('error', {
+                                            time: 20000,
+                                            btn: ['明白了']
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    }, function(index, layero){
+                        layer.close(layer.index);
+                    });
+                });
+
+            } else if(obj.event === 'passwordReset'){
+                layui.use('layer', function(){
+                    var layer = layui.layer;
+                    layer.confirm('是否重置该用户密码', {
+                        btn: ['取消', '确定'] //可以无限个按钮
+                        ,btn2: function(index, layero){
+                            $.ajax({
+                                url : "/bpm/admin/resetPassword",
+                                data : params,
+                                type : "POST",
+                                timeout : 10000,
+                                cache : false,
+                                beforeSend :function(xmlHttp){
+                                    xmlHttp.setRequestHeader("If-Modified-Since","0");
+                                    xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                                },
+                                success : function(result) {
+                                    if (result.success == true) {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('重置密码成功', {
+                                                time: 20000,
+                                                btn: ['明白了'],
+                                            });
+                                        });
+                                        permissionAjax();
+                                    }else {
+                                        layui.use('layer', function(){
+                                            var $ = layui.jquery, layer = layui.layer;
+                                            layer.msg('重置密码失败，错误信息：'+result.msg, {
+                                                time: 20000,
+                                                btn: ['明白了']
+                                            });
+                                        });
+                                    }
+                                },
+                                error : function(result) {
+                                    layui.use('layer', function(){
+                                        var $ = layui.jquery, layer = layui.layer;
+                                        layer.msg('error', {
+                                            time: 20000,
+                                            btn: ['明白了']
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    }, function(index, layero){
+                        layer.close(layer.index);
+                    });
+                });
+
+            }else {
+                return;
+            }
+
+        });
+    });
+    function passwordChang() {
+        $.ajax({
+            type : 'GET',
+            url : 'views/components/passwordChg.html',
+            dataType : 'html',
+            cache : false,
+            async: false,
+            beforeSend : function() {
+            },
+            success : function(response) {
+                layer.open({
+                    type: 1,
+                    title: '修改密码',
+                    area: ['549px', '400px'],
+                    content: response //注意，如果str是object，那么需要字符拼接。
+                    ,btn: ['确定', '取消'] //只是为了演示
+                    ,no: function(index, layero){
+                    }
+                    ,yes: function(){
+                        var reasonText = $("#oldpassword").val();
+                        var reasonText1 = $("#newpassword").val();
+                        var reasonText2 = $("#newpassword1").val();
+                        if(reasonText==""||reasonText==null||reasonText==undefined){
+                            $("#passwordHelpId").html("初始密码不能为空")
+                            $("#passwordHelpId").show();
+                            return;
+                        }else if(reasonText1==""||reasonText1==null||reasonText1==undefined){
+                            $("#passwordHelpId1").html("修改密码不能为空")
+                            $("#passwordHelpId1").show();
+                            return;
+                        }else if(reasonText2==""||reasonText2==null||reasonText2==undefined){
+                            $("#passwordHelpId2").html("确认密码不能为空")
+                            $("#passwordHelpId2").show();
+                            return;
+                        }else if(reasonText1!=reasonText2){
+                            $("#passwordHelpId2").html("新密码不一致")
+                            $("#passwordHelpId2").show();
+                            return;
+                        }
+
+                        var  params = {
+                            "oldPassWord":reasonText,
+                            "newPassWord":reasonText1
+                        }
+                        $.ajax({
+                            url : "/bpm/admin/updatePassword",
+                            data : params,
+                            type : "POST",
+                            timeout : 10000,
+                            cache : false,
+                            beforeSend :function(xmlHttp){
+                                xmlHttp.setRequestHeader("If-Modified-Since","0");
+                                xmlHttp.setRequestHeader("Cache-Control","no-cache");
+                            },
+                            success : function(result) {
+                                if (result.success == true) {
+                                    layui.use('layer', function(){
+                                        var $ = layui.jquery, layer = layui.layer;
+                                        layer.msg('修改成功', {
+                                            time: 20000,
+                                            btn: ['明白了'],
+                                            yes: function(index, layero){
+                                                //do something
+                                                layer.closeAll();
+                                            }
+                                        });
+                                    });
+
+                                }else {
+                                    layui.use('layer', function(){
+                                        var $ = layui.jquery, layer = layui.layer;
+                                        layer.msg('修改失败，错误信息：'+result.msg, {
+                                            time: 20000,
+                                            btn: ['明白了']
+                                        });
+                                    });
+                                }
+                            },
+                            error : function(result) {
+                                layui.use('layer', function(){
+                                    var $ = layui.jquery, layer = layui.layer;
+                                    layer.msg('error', {
+                                        time: 20000,
+                                        btn: ['明白了']
+                                    });
+                                });
+                            }
+                        });
+
+
+                    }
+
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                    }
+                });
+            }
+        })
+    }
+    function selectPermissionTable1() {
+        layui.use('table', function(){
+            var table = layui.table;
+            var fiterName = $("#selectPermissionTable").val();
+            table.reload('superPermissionTableModel', {
+                where: {
+                    keyword: fiterName
+                }
+                ,url: '/bpm/queryManagers'
+                ,page: {
+                    curr: 1
+                }
+            });
+        })
+    };
+    //清空用户搜索 111
+    function selectPermissionTable2() {
+        layui.use('table', function(){
+            var table = layui.table;
+            $("#selectPermissionTable").val("");
+            table.reload('superPermissionTableModel', {
+                where: {
+                    keyword: ""
+                }
+                ,url: '/bpm/queryManagers'
+                ,page: {
+                    curr: 1
+                }
+            });
+        })
+    };
+
+    function getUserNameAjax() {
+        SetCurrentUserNameCanvas("超管",8);
+    }
+    function SetCurrentUserNameCanvas(userName,pxNum) {
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.fillStyle = "#F0F0F0";
+        ctx.arc(20,20,18,0,2*Math.PI);
+        ctx.fill();
+        ctx.font = "11px Verdana";
+        ctx.fillStyle = "#3da0ff";
+        ctx.stroke();
+        ctx.font="10px Arial";
+        ctx.fillText(userName,pxNum,24);
+    }
+    getUserNameAjax();
+</script>
+</body>
+</html>

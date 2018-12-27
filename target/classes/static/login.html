@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0">
+<link rel="Shortcut Icon" href="img/favicon.ico" />
+<title>后台登录</title> 
+<link href="css/loginNew.css" type="text/css" rel="stylesheet">
+	<script src="js/layui/layui.js" charset="utf-8"></script>
+	<script src="js/jquery/dist/jquery.min.js"></script>啊I、
+	<script src="js/jsencrypt/jsencrypt.min.js"></script>
+	<script src="js/code.js"></script>
+</head>
+
+<body>
+<div class="login">
+    <div class="message">神玥互联网-流程中心</div>
+    <div id="darkbannerwrap"></div>
+    
+    <form action="login" id="loginForm" method="POST">
+		<input name="action" value="login" type="hidden">
+		<input name="username" placeholder="用户名" required="" type="text">
+		<hr class="hr15">
+		<input name="password" id="password" onblur="encryption();" placeholder="密码" required="" type="password">
+		<hr class="hr15">
+		<input name="code_input" id="code_input" style="width: 140px;float:left" placeholder="验证码" required="" type="text">
+		<div id="v_container" style="width: 200px; float:left; height: 50px;"></div>
+		<hr class="hr15">
+		<input value="登录" id="my_button" style="width:100%;" type="submit">
+		<hr class="hr20">
+	</form>
+</div>
+
+
+
+<script>
+    var verifyCode = new GVerify("v_container");
+    document.getElementById("my_button").onclick = function(e){
+        if(document.getElementById("code_input").value!==''){
+            var res = verifyCode.validate(document.getElementById("code_input").value);
+            if(res){
+//                var form = document.getElementById('loginForm');
+//                form.submit()
+            }else{
+                layui.use('layer', function(){
+                    var layer = layui.layer
+                    layer.msg('验证码错误');
+                })
+//                document.getElementById("password").value='';
+                e.preventDefault()
+            }
+        }
+    }
+    var publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCfaLKN7ag/u1uR1e+YvPsdt3mZ0LVoGyEKdYMH69W9l85USFGQ8r1GMiekgC/1iexvWzO3mSlJ+8nCN5y9yOA7V4hUsM0hJFEmzWwCxnCR8ljxfgw/8YLGrCdhYVH/6EgH1+ZlpSw0ZqHdWRccUWVW5pMwIzWU0DW6nfecJwTDPQIDAQAB"
+
+    function encryption(){
+        var value = document.getElementById("password").value;
+        var dataTempValue = encryptData(value,publicKey)
+		document.getElementById("password").value=dataTempValue
+    }
+    function encryptData(data, publicKey){
+        var encrypt = new JSEncrypt();
+        encrypt.setPublicKey(publicKey);
+        var encrypted = encrypt.encrypt(data);
+        return encrypted;
+    }
+</script>
+</body>
+</html>

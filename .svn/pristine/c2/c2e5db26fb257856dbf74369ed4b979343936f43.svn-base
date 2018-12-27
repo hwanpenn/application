@@ -1,0 +1,22 @@
+<div class="animated fadeIn" id="loadPermission" style="display: none">
+  <div class="">
+    <div class="">
+      <div class="tab-pane" id="loadPermissionTable" role="tabpanel">
+        <div>
+          <div class="card">
+            <div style="padding: 0.40rem 1.25rem;" class="card-header">
+              <div class="row">
+                <div  class="col-md-3 input-prepend input-group">
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="layui-hide" id="loadPermissionTableModel" lay-data="{id: 'loadPermissionTableModel'}" lay-filter="loadPermissionTableModel"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
